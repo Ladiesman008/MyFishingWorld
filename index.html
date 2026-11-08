@@ -4,20 +4,429 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fishing Master 3D - Realistic Edition</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- Google Fonts: Chewy (Gaya Font Finding Nemo / Kartun Bubbly) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Chewy', cursive, sans-serif; 
+            letter-spacing: 1px;
+        }
+
+        body {
+            overflow: hidden;
+            background-color: #0b132b;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+
+        /* GLASSMORPHISM BASE */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+            font-size: 1.2rem;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+        }
+
+        /* LAYOUT & SCREEN FADE TRANSITION */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* LOADING SCREEN */
+        #loading-screen {
+            background: radial-gradient(circle at center, #1b263b 0%, #0d1b2a 100%);
+            flex-direction: column;
+        }
+
+        .loading-content {
+            text-align: center;
+            padding: 40px 60px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid #00f2fe; 
+            border-bottom: 2px solid #ff0055; 
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent 0%, transparent 40%, rgba(0, 242, 254, 0.1) 50%, transparent 60%, transparent 100%);
+            animation: rotateGlow 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo {
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #ff0055 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            text-transform: uppercase;
+        }
+
+        .loading-text-status {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            width: 350px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            margin: 0 auto 20px auto;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease;
+        }
+
+        #progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff0055 0%, #00f2fe 100%);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+            transition: width 0.2s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+            border-radius: 12px;
+        }
+        
+        .percentage-text {
+            font-family: monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #00f2fe;
+            margin-bottom: 15px;
+            transition: opacity 0.3s ease;
+        }
+
+        #btn-enter {
+            display: none;
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2) 0%, rgba(0, 242, 254, 0.4) 100%);
+            border-color: #00f2fe;
+            font-size: 1.2rem;
+            padding: 14px 30px;
+            animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        #btn-enter:hover {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.4) 0%, rgba(0, 242, 254, 0.6) 100%);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+        }
+
+        @keyframes popUp {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* LAYAR INTRO / SPLASH SCREEN & BUBBLES */
+        #intro-screen {
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .floating-intro-text {
+            font-size: 6.5rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-align: center;
+            -webkit-text-stroke: 3px #0a192f;
+            text-shadow: 0 8px 0 #00f2fe, 
+                         0 15px 25px rgba(0, 0, 0, 0.8), 
+                         0 0 40px rgba(0, 242, 254, 0.6), 
+                         0 0 60px rgba(255, 0, 85, 0.4);
+            animation: floatCinematic 4s ease-in-out infinite;
+        }
+
+        @keyframes floatCinematic {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-25px) scale(1.02); }
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(0, 242, 254, 0.3) 60%, transparent 100%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: rise 2.5s ease-in forwards;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(0.5) translateX(0); opacity: 0; }
+            20% { opacity: 1; }
+            50% { transform: translateY(-50vh) scale(1) translateX(var(--sway)); }
+            100% { transform: translateY(-110vh) scale(1.5) translateX(calc(var(--sway) * -1)); opacity: 0; }
+        }
+
+        /* MAIN MENU */
+        #main-menu-screen {
+            background: radial-gradient(circle at center, rgba(11,19,43,0.2) 0%, rgba(11,19,43,0.8) 100%);
+        }
+
+        .menu-box {
+            text-align: center;
+            padding: 50px 70px;
+        }
+
+        .menu-box h1 {
+            font-size: 3.5rem;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .menu-box .subtitle {
+            font-size: 1.3rem;
+            color: #4facfe;
+            margin-bottom: 35px;
+        }
+
+        /* CUSTOM MODAL CSS */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: rgba(20, 30, 60, 0.85);
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0,242,254,0.2);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            min-width: 300px;
+            max-width: 80%;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-message {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .btn-confirm { background: rgba(0, 242, 254, 0.2); border-color: #00f2fe; }
+        .btn-cancel { background: rgba(255, 75, 75, 0.2); border-color: #ff4b4b; }
+
+        /* GAME UI OVERLAY & 3D CONTAINER */
+        #game-screen { display: block; }
+        #3d-container { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 3s ease-in-out;
+        }
+
+        .game-ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .top-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 25px;
+            pointer-events: auto;
+        }
+
+        .status-bar { padding: 12px 28px; font-size: 1.3rem; font-weight: bold; border-radius: 30px; }
+        .mode-panel { padding: 12px 30px; border-radius: 30px; }
+        .mode-panel h2 { font-size: 1.3rem; font-weight: 500; }
+
+        .action-panel {
+            margin: 0 auto;
+            padding: 25px 35px;
+            width: 90%;
+            max-width: 580px;
+            text-align: center;
+            pointer-events: auto;
+            animation: slideUp 0.4s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fish-list { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
+
+        .fish-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .fish-card.selected {
+            border-color: #00f2fe;
+            background: rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        .aquarium-actions { display: flex; justify-content: center; gap: 12px; margin-top: 15px; }
+
+        /* POWER METER */
+        .fishing-hud-container {
+            position: absolute;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            pointer-events: auto;
+            text-align: center;
+        }
+
+        .power-meter-wrapper { padding: 16px 28px; width: 340px; }
+        .power-meter-label { font-size: 1rem; font-weight: bold; color: #4facfe; margin-bottom: 8px; }
+        .power-meter-bar { width: 100%; height: 16px; background: rgba(0,0,0,0.5); border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+        #power-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #4facfe 0%, #00f2fe 70%, #ff4b4b 100%); box-shadow: 0 0 10px rgba(0, 242, 254, 0.8); }
+
+        .status-toast { margin-top: 15px; padding: 10px 20px; font-weight: bold; color: #ffeb3b; font-size: 1.2rem; }
+        .status-msg { color: #ffeb3b; margin-top: 10px; font-weight: 500; font-size: 1.2rem; }
+
+        .bottom-nav { display: flex; justify-content: center; gap: 15px; padding: 15px 30px; margin: 0 auto 25px auto; border-radius: 24px; pointer-events: auto; }
+        .exit-btn { background: rgba(255, 75, 75, 0.18); border-color: rgba(255, 75, 75, 0.4); }
+        .exit-btn:hover { background: rgba(255, 75, 75, 0.35); }
+    </style>
 </head>
 <body>
+
+    <!-- CUSTOM MODAL SYSTEM -->
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div id="modal-text" class="modal-message">Pesan disini</div>
+            <div class="modal-buttons">
+                <button id="modal-btn-cancel" class="glass-btn btn-cancel" style="display:none;">Batal</button>
+                <button id="modal-btn-confirm" class="glass-btn btn-confirm">OK</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 1. LAYAR LOADING -->
     <div id="loading-screen" class="screen">
         <div class="loading-content glass-panel">
             <h1 class="logo">FISHING MASTER 3D</h1>
-            <p>Memuat Dunia Realistic & Aset...</p>
-            <div class="progress-bar">
+            <p id="loading-status-text" class="loading-text-status">Menginisialisasi Engine...</p>
+            
+            <div class="percentage-text" id="progress-percent">0%</div>
+            <div class="progress-bar" id="progress-container">
                 <div id="progress-fill"></div>
             </div>
-            <button id="btn-enter" class="glass-btn" style="display: none;">Masuk ke Permainan</button>
+            
+            <button id="btn-enter" class="glass-btn">Masuk ke Permainan</button>
         </div>
+    </div>
+
+    <!-- LAYAR TRANSISI GELEMBUNG BAWAH AIR -->
+    <div id="bubble-transition-screen" class="screen hidden" style="background: linear-gradient(to top, #020813, #0b132b); z-index: 99;">
+        <div id="bubble-container" style="position: absolute; width: 100%; height: 100%; overflow: hidden; pointer-events: none;"></div>
+    </div>
+
+    <!-- LAYAR INTRO / SPLASH CINEMATIC -->
+    <div id="intro-screen" class="screen hidden">
+        <h1 class="floating-intro-text">MY FISHING WORLD</h1>
     </div>
 
     <!-- 2. LAYAR MAIN MENU -->
@@ -31,9 +440,7 @@
 
     <!-- 3. LAYAR PERMAINAN UTAMA -->
     <div id="game-screen" class="screen hidden">
-        
         <div class="game-ui-overlay">
-            
             <!-- Top HUD -->
             <div class="top-hud">
                 <div class="status-bar glass-panel">
@@ -49,9 +456,7 @@
             <div id="aquarium-panel" class="action-panel glass-panel" style="display: none;">
                 <h3>🐟 Tangki Pembiakan (Breeding Tank)</h3>
                 
-                <div class="fish-list" id="fish-inventory">
-                    <!-- Ditampilkan secara dinamis oleh JS -->
-                </div>
+                <div class="fish-list" id="fish-inventory"></div>
 
                 <div class="aquarium-actions">
                     <button id="btn-feed" class="glass-btn">🍔 Beri Makan</button>
@@ -69,7 +474,7 @@
                     <div class="power-meter-bar">
                         <div id="power-fill"></div>
                     </div>
-                    <small id="power-text">TAHAN MOUSE / TEKAN LALU LEPAS UNTUK LEMPAR</small>
+                    <small id="power-text">TAHAN MOUSE LALU LEPAS UNTUK LEMPAR</small>
                 </div>
                 
                 <div id="fishing-status" class="status-toast glass-panel" style="display: none;">
@@ -91,10 +496,537 @@
 
     <!-- Core Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Water.js"></script>
 
     <!-- Game Logic -->
-    <script src="script.js"></script>
+    <script>
+        // ==========================================
+        // SISTEM MODAL KUSTOM
+        // ==========================================
+        const modal = document.getElementById('custom-modal');
+        const modalText = document.getElementById('modal-text');
+        const modalBtnConfirm = document.getElementById('modal-btn-confirm');
+        const modalBtnCancel = document.getElementById('modal-btn-cancel');
+
+        function customAlert(message, callback) {
+            modalText.innerText = message;
+            modalBtnCancel.style.display = 'none';
+            modal.classList.add('active');
+            
+            modalBtnConfirm.onclick = () => {
+                modal.classList.remove('active');
+                if(callback) callback();
+            };
+        }
+
+        function customConfirm(message, callbackYes, callbackNo) {
+            modalText.innerText = message;
+            modalBtnCancel.style.display = 'inline-block';
+            modal.classList.add('active');
+            
+            modalBtnConfirm.onclick = () => {
+                modal.classList.remove('active');
+                if(callbackYes) callbackYes();
+            };
+            modalBtnCancel.onclick = () => {
+                modal.classList.remove('active');
+                if(callbackNo) callbackNo();
+            };
+        }
+
+        // ==========================================
+        // 1. MANAJEMEN STATE & TRANSISI UI
+        // ==========================================
+        const screens = {
+            loading: document.getElementById('loading-screen'),
+            bubble: document.getElementById('bubble-transition-screen'),
+            intro: document.getElementById('intro-screen'),
+            menu: document.getElementById('main-menu-screen'),
+            game: document.getElementById('game-screen')
+        };
+
+        let appState = 'LOADING'; 
+        let currentMode = 'FISHING'; 
+
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => {
+                if(screen) screen.classList.add('hidden');
+            });
+            setTimeout(() => {
+                if (screens[screenName]) screens[screenName].classList.remove('hidden');
+            }, 150);
+        }
+
+        // --- DYNAMIC LOADING MANAGER ---
+        const progressFill = document.getElementById('progress-fill');
+        const progressPercent = document.getElementById('progress-percent');
+        const statusTextNode = document.getElementById('loading-status-text');
+        const progressContainer = document.getElementById('progress-container');
+        const btnEnter = document.getElementById('btn-enter');
+
+        let loadProgress = 0;
+        
+        function simulateLoading() {
+            let increment = Math.floor(Math.random() * 12) + 2; 
+            let delay = Math.floor(Math.random() * 200) + 50;
+            if (Math.random() < 0.1) delay += 400; 
+
+            loadProgress += increment;
+            if (loadProgress >= 100) loadProgress = 100;
+
+            progressFill.style.width = loadProgress + '%';
+            progressPercent.innerText = loadProgress + '%';
+
+            if (loadProgress > 15 && loadProgress < 40) statusTextNode.innerText = "Memuat Tekstur Permukaan Air...";
+            else if (loadProgress >= 40 && loadProgress < 75) statusTextNode.innerText = "Membangun Geometri Lingkungan...";
+            else if (loadProgress >= 75 && loadProgress < 99) statusTextNode.innerText = "Menyiapkan Logika Fisika & Shader...";
+            
+            if (loadProgress < 100) {
+                setTimeout(simulateLoading, delay);
+            } else {
+                statusTextNode.innerText = "Sistem Siap!";
+                statusTextNode.style.color = "#00f2fe";
+                
+                setTimeout(() => {
+                    progressContainer.style.opacity = '0';
+                    progressPercent.style.opacity = '0';
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        progressPercent.style.display = 'none';
+                        btnEnter.style.display = 'inline-block';
+                    }, 300);
+                }, 500);
+            }
+        }
+        
+        setTimeout(simulateLoading, 500);
+
+        // --- BUBBLE TRANSITION & WEB AUDIO API ---
+        function playBubbleTransition(onComplete) {
+            showScreen('bubble');
+            const container = document.getElementById('bubble-container');
+            container.innerHTML = '';
+
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                const ctx = new AudioContext();
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(400 + Math.random() * 300, ctx.currentTime);
+                        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+                        
+                        gain.gain.setValueAtTime(0, ctx.currentTime);
+                        gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                        
+                        osc.start(ctx.currentTime);
+                        osc.stop(ctx.currentTime + 0.2);
+                    }, Math.random() * 1500); 
+                }
+            }
+
+            for(let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    let b = document.createElement('div');
+                    b.className = 'bubble';
+                    let size = 15 + Math.random() * 35;
+                    b.style.width = size + 'px';
+                    b.style.height = size + 'px';
+                    b.style.left = (Math.random() * 100) + '%';
+                    b.style.setProperty('--sway', (Math.random() * 80 - 40) + 'px');
+                    container.appendChild(b);
+                }, Math.random() * 1200);
+            }
+
+            setTimeout(() => {
+                if(onComplete) onComplete();
+            }, 2500);
+        }
+
+        btnEnter.addEventListener('click', () => {
+            playBubbleTransition(() => {
+                init3DWorld();
+            });
+        });
+
+        document.getElementById('btn-new-game').addEventListener('click', () => {
+            appState = 'FISHING';
+            showScreen('game');
+            targetCameraPos.copy(defaultCameraPos);
+            targetCameraLookAt.copy(defaultCameraLookAt);
+        });
+
+        // ==========================================
+        // 2. SISTEM AKUARIUM & GENETIK WARNA
+        // ==========================================
+        let coins = 100;
+        let aquariumFishes = [
+            { id: 1, species: 'Ikan Mas', color: '#ff3333', price: 25, isHungry: true },
+            { id: 2, species: 'Ikan Mas', color: '#3388ff', price: 25, isHungry: true }
+        ];
+        let selectedFishes = [];
+
+        const aquariumPanel = document.getElementById('aquarium-panel');
+        const fishInventory = document.getElementById('fish-inventory');
+        const aquariumMessage = document.getElementById('aquarium-message');
+        const coinDisplay = document.getElementById('coin-display');
+        const modeTitle = document.getElementById('mode-title');
+        const fishingHud = document.getElementById('fishing-hud');
+
+        function renderAquariumUI() {
+            fishInventory.innerHTML = '';
+            aquariumFishes.forEach(fish => {
+                const card = document.createElement('div');
+                card.className = 'fish-card';
+                card.innerHTML = `
+                    <div style="width:40px; height:20px; background-color:${fish.color}; border-radius:10px; margin:0 auto 6px auto; box-shadow: 0 0 8px ${fish.color};"></div>
+                    <small>${fish.species}</small><br>
+                    <small style="opacity: 0.7;">${fish.isHungry ? 'Minta Makan' : 'Kenyang'}</small>
+                `;
+                card.onclick = () => {
+                    const index = selectedFishes.indexOf(fish);
+                    if (index > -1) {
+                        selectedFishes.splice(index, 1);
+                        card.classList.remove('selected');
+                    } else if (selectedFishes.length < 2) {
+                        selectedFishes.push(fish);
+                        card.classList.add('selected');
+                    }
+                };
+                fishInventory.appendChild(card);
+            });
+        }
+
+        document.getElementById('btn-feed').addEventListener('click', () => {
+            aquariumFishes.forEach(fish => fish.isHungry = false);
+            aquariumMessage.innerText = "Semua ikan sudah kenyang!";
+            renderAquariumUI();
+        });
+
+        document.getElementById('btn-sell').addEventListener('click', () => {
+            if (selectedFishes.length === 0) return aquariumMessage.innerText = "Pilih ikan dulu!";
+            let earned = 0;
+            selectedFishes.forEach(fish => {
+                earned += fish.price;
+                aquariumFishes = aquariumFishes.filter(f => f.id !== fish.id);
+            });
+            coins += earned;
+            coinDisplay.innerText = coins;
+            aquariumMessage.innerText = `Terjual! Mendapatkan ${earned} koin.`;
+            selectedFishes = [];
+            renderAquariumUI();
+        });
+
+        document.getElementById('btn-breed').addEventListener('click', () => {
+            if (selectedFishes.length !== 2) return aquariumMessage.innerText = "Pilih tepat 2 ikan!";
+            const [pA, pB] = selectedFishes;
+            if (pA.isHungry || pB.isHungry) return aquariumMessage.innerText = "Ikan lapar, beri makan dulu!";
+
+            const cA = new THREE.Color(pA.color);
+            const cB = new THREE.Color(pB.color);
+            const babyColor = cA.lerp(cB, 0.5);
+            
+            babyColor.r = Math.max(0, Math.min(1, babyColor.r + (Math.random() * 0.2 - 0.1)));
+            babyColor.g = Math.max(0, Math.min(1, babyColor.g + (Math.random() * 0.2 - 0.1)));
+            babyColor.b = Math.max(0, Math.min(1, babyColor.b + (Math.random() * 0.2 - 0.1)));
+
+            const babyFish = {
+                id: Date.now(),
+                species: pA.species,
+                color: '#' + babyColor.getHexString(),
+                price: pA.price + Math.floor(Math.random() * 15),
+                isHungry: true
+            };
+            
+            aquariumFishes.push(babyFish);
+            aquariumMessage.innerText = "Berhasil! Anakan ikan dengan mutasi warna lahir!";
+            selectedFishes = [];
+            renderAquariumUI();
+        });
+
+        document.getElementById('nav-fishing').addEventListener('click', () => {
+            currentMode = 'FISHING';
+            modeTitle.innerText = "Mode Memancing Danau 🎣";
+            aquariumPanel.style.display = 'none';
+            fishingHud.style.display = 'block';
+            if(targetCameraPos) targetCameraPos.copy(defaultCameraPos);
+            if(targetCameraLookAt) targetCameraLookAt.copy(defaultCameraLookAt);
+        });
+
+        document.getElementById('nav-aquarium').addEventListener('click', () => {
+            currentMode = 'AQUARIUM';
+            modeTitle.innerText = "Akuarium Pembiakan 🐟";
+            aquariumPanel.style.display = 'block';
+            fishingHud.style.display = 'none';
+            renderAquariumUI();
+        });
+
+        document.getElementById('nav-exit').addEventListener('click', () => {
+            customConfirm("Kembali ke Menu Utama?\n\n(Progres ikan Anda tetap tersimpan)", () => {
+                appState = 'MENU';
+                showScreen('menu');
+            });
+        });
+
+        // ==========================================
+        // 3. REALISTIC THREE.JS WORLD & PHYSICS
+        // ==========================================
+        let scene, camera, renderer, water;
+        let floatMesh;
+        let waterRipples = [];
+
+        const defaultCameraPos = new THREE.Vector3(0, 5, 12);
+        const defaultCameraLookAt = new THREE.Vector3(0, 1, 0);
+        let targetCameraPos = new THREE.Vector3(0, 8, 15);
+        let targetCameraLookAt = new THREE.Vector3(0, 0, 0);
+        let currentCameraLookAt = new THREE.Vector3(0, 0, 0);
+
+        let fishingState = 'IDLE'; 
+        let powerValue = 0;
+        let powerDirection = 1;
+        let velocityY = 0, velocityZ = 0;
+        const gravity = -0.012;
+
+        const powerFill = document.getElementById('power-fill');
+        const fishingStatus = document.getElementById('fishing-status');
+        const statusText = document.getElementById('status-text');
+
+        function init3DWorld() {
+            if (renderer) return;
+
+            const container = document.getElementById('3d-container');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87ceeb);
+            scene.fog = new THREE.FogExp2(0x87ceeb, 0.015);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            container.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+
+            const sunLight = new THREE.DirectionalLight(0xfffaed, 1.2);
+            sunLight.position.set(50, 40, 20);
+            scene.add(sunLight);
+
+            const textureLoader = new THREE.TextureLoader();
+            const waterNormals = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/waternormals.jpg', function(texture) {
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            });
+
+            const waterGeometry = new THREE.PlaneGeometry(500, 500);
+            water = new THREE.Water(waterGeometry, {
+                textureWidth: 512,
+                textureHeight: 512,
+                waterNormals: waterNormals,
+                sunDirection: sunLight.position.clone().normalize(),
+                sunColor: 0xffffff,
+                waterColor: 0x001e0f,
+                distortionScale: 4.5,
+                fog: scene.fog !== undefined
+            });
+            water.rotation.x = -Math.PI / 2;
+            scene.add(water);
+
+            const floatGroup = new THREE.Group();
+            const topGeo = new THREE.SphereGeometry(0.25, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+            const topMat = new THREE.MeshStandardMaterial({ color: 0xff2222, roughness: 0.3 });
+            const botGeo = new THREE.SphereGeometry(0.25, 16, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+            const botMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
+
+            floatGroup.add(new THREE.Mesh(topGeo, topMat));
+            floatGroup.add(new THREE.Mesh(botGeo, botMat));
+            floatGroup.visible = false;
+            scene.add(floatGroup);
+            floatMesh = floatGroup;
+
+            window.addEventListener('mousedown', (e) => {
+                if (appState === 'FISHING' && currentMode === 'FISHING' && fishingState === 'IDLE' && e.target.closest('#3d-container')) {
+                    fishingState = 'CHARGING';
+                    powerValue = 0;
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (fishingState === 'CHARGING') {
+                    fishingState = 'CASTING';
+                    castLure(powerValue);
+                }
+            });
+
+            window.addEventListener('resize', onWindowResize);
+
+            // Mulai Intro Sinematik setelah world dimuat
+            startCinematicIntro();
+            animate();
+        }
+
+        function startCinematicIntro() {
+            appState = 'INTRO';
+            camera.position.set(0, 1.2, 10);
+            camera.lookAt(0, 0, 0);
+
+            document.getElementById('3d-container').style.opacity = '1';
+            showScreen('intro');
+
+            setTimeout(() => {
+                appState = 'MENU';
+                showScreen('menu');
+            }, 5000);
+        }
+
+        function castLure(power) {
+            floatMesh.visible = true;
+            floatMesh.position.set(0, 1.5, 3);
+            velocityZ = (power / 100) * -1.1;
+            velocityY = (power / 100) * 0.35 + 0.18;
+
+            fishingStatus.style.display = 'inline-block';
+            statusText.innerText = `Melempar! Power: ${Math.round(power)}%`;
+        }
+
+        function spawnWaterRipple(x, z) {
+            const ringGeo = new THREE.RingGeometry(0.1, 0.25, 32);
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+            const ripple = new THREE.Mesh(ringGeo, ringMat);
+            ripple.rotation.x = Math.PI / 2;
+            ripple.position.set(x, 0.02, z);
+            ripple.userData = { scale: 1, opacity: 0.8 };
+            scene.add(ripple);
+            waterRipples.push(ripple);
+        }
+
+        function updatePhysics() {
+            if (fishingState === 'CHARGING') {
+                powerValue += 2 * powerDirection;
+                if (powerValue >= 100) { powerValue = 100; powerDirection = -1; }
+                if (powerValue <= 0) { powerValue = 0; powerDirection = 1; }
+                powerFill.style.width = powerValue + '%';
+            }
+
+            if (fishingState === 'CASTING') {
+                floatMesh.position.z += velocityZ;
+                floatMesh.position.y += velocityY;
+                velocityY += gravity;
+
+                targetCameraPos.set(floatMesh.position.x, floatMesh.position.y + 2, floatMesh.position.z + 4);
+                targetCameraLookAt.copy(floatMesh.position);
+
+                if (floatMesh.position.y <= 0) {
+                    floatMesh.position.y = 0;
+                    fishingState = 'WAITING';
+                    spawnWaterRipple(floatMesh.position.x, floatMesh.position.z);
+                    
+                    const depth = Math.abs(floatMesh.position.z);
+                    statusText.innerText = `Kail Mendarat di Kedalaman ${Math.round(depth)}m. Menunggu Ikan...`;
+                    
+                    targetCameraPos.copy(defaultCameraPos);
+                    targetCameraLookAt.copy(defaultCameraLookAt);
+
+                    setTimeout(() => {
+                        if (fishingState === 'WAITING') triggerStrike(depth);
+                    }, 3000);
+                }
+            }
+
+            if (fishingState === 'WAITING') {
+                floatMesh.position.y = Math.sin(Date.now() * 0.005) * 0.05;
+                if (Math.random() < 0.03) spawnWaterRipple(floatMesh.position.x, floatMesh.position.z);
+            }
+
+            for (let i = waterRipples.length - 1; i >= 0; i--) {
+                const r = waterRipples[i];
+                r.userData.scale += 0.04;
+                r.scale.set(r.userData.scale, r.userData.scale, 1);
+                r.userData.opacity -= 0.015;
+                r.material.opacity = Math.max(0, r.userData.opacity);
+                if (r.userData.opacity <= 0) {
+                    scene.remove(r);
+                    r.geometry.dispose();
+                    r.material.dispose();
+                    waterRipples.splice(i, 1);
+                }
+            }
+        }
+
+        function triggerStrike(depth) {
+            statusText.innerText = "💥 IKAN MEMAKAN UMPAN! KLIK CEPAT!";
+            floatMesh.position.y = -0.2;
+
+            const timeout = setTimeout(() => {
+                if (fishingState === 'WAITING') {
+                    statusText.innerText = "❌ Ikan Lepas!";
+                    resetFishing();
+                }
+            }, 2000);
+
+            const onStrikeClick = (e) => {
+                if(!e.target.closest('#3d-container')) return;
+
+                clearTimeout(timeout);
+                window.removeEventListener('click', onStrikeClick);
+                if (fishingState === 'WAITING') {
+                    const reward = Math.floor(depth * 2) + 15;
+                    coins += reward;
+                    coinDisplay.innerText = coins;
+                    customAlert(`🎉 IKAN TERTANGKAP!\n\nKedalaman: ${Math.round(depth)}m\nHadiah: 🪙 ${reward} Koin!`);
+                    resetFishing();
+                }
+            };
+            window.addEventListener('click', onStrikeClick);
+        }
+
+        function resetFishing() {
+            setTimeout(() => {
+                fishingState = 'IDLE';
+                powerValue = 0;
+                powerFill.style.width = '0%';
+                floatMesh.visible = false;
+                fishingStatus.style.display = 'none';
+            }, 1200);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (water) water.material.uniforms['time'].value += 1.0 / 60.0;
+
+            if (appState === 'INTRO') {
+                const time = Date.now() * 0.0005;
+                camera.position.x = Math.sin(time) * 1.5;
+                camera.position.y = 1.2 + Math.sin(time * 2) * 0.3;
+                camera.lookAt(0, 0, 0);
+            } 
+            else if (appState === 'FISHING' || appState === 'MENU') {
+                if(appState === 'FISHING') updatePhysics();
+                
+                camera.position.lerp(targetCameraPos, 0.03);
+                currentCameraLookAt.lerp(targetCameraLookAt, 0.03);
+                camera.lookAt(currentCameraLookAt);
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            if(!camera || !renderer) return;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+    </script>
 </body>
 </html>
