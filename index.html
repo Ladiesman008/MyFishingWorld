@@ -1,632 +1,100 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#25272c" />
-    <meta name="description" content="MyJapan — bangun dan kembangkan kota Jepang dari zaman Jōmon hingga era modern." />
-    <title>MyJapan — Japanese Town Builder</title>
-  </head>
-  <body>
-    <div id="game-root">
-      <svg class="ui-icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-        <symbol id="icon-daimyo-helmet" viewBox="0 0 64 64">
-          <path d="M10 27C8 18 5 13 7 7c6 3 10 8 11 15M54 27c2-9 5-14 3-20-6 3-10 8-11 15"/>
-          <path d="M12 27c1-13 9-21 20-21s19 8 20 21M7 27h50l-4 7H11z"/>
-          <path d="M18 33c-2 7-2 13 1 18h26c3-5 3-11 1-18M22 37v10M42 37v10M28 37v8h8v-8"/>
-          <path d="M32 5c-5 5-6 12-1 17-1-6 3-10 8-12-1-3-3-5-7-5Z"/>
-          <path d="m18 51-2 7h32l-2-7M24 55h16M27 58v3M37 58v3"/>
-        </symbol>
-        <symbol id="icon-japanese-house" viewBox="0 0 64 64">
-          <path d="m5 27 27-19 27 19-4 3-23-15L9 30z"/>
-          <path d="M12 29v27h40V29M7 56h50M17 27c5 3 25 3 30 0M19 34h26v22H19z"/>
-          <path d="M26 36h12v20H26zM22 41h4M38 41h4M22 48h4M38 48h4"/>
-          <path d="M29 8c0-4 6-4 6 0M32 5V2"/>
-        </symbol>
-        <symbol id="icon-mission-scroll" viewBox="0 0 24 24">
-          <path d="M6 4h12v16H6zM4 7H3v10h1M20 7h1v10h-1M9 8h6M9 12h6M9 16h4"/>
-          <path d="m15.5 2 .8 1.5L18 4l-1.2 1.2.2 1.7-1.5-.7-1.5.7.2-1.7L13 4l1.7-.5z"/>
-        </symbol>
-        <symbol id="icon-achievement" viewBox="0 0 24 24">
-          <path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 13v5M8 21h8M9 18h6"/>
-          <path d="m12 5 .8 1.6 1.8.3-1.3 1.3.3 1.8L12 9.2l-1.6.8.3-1.8-1.3-1.3 1.8-.3z"/>
-        </symbol>
-        <symbol id="icon-envelope" viewBox="0 0 24 24">
-          <rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>
-        </symbol>
-        <symbol id="icon-speed" viewBox="0 0 24 24">
-          <path d="M4 18a9 9 0 1 1 16 0M12 13l5-5M7 18h10"/><path d="M12 3v2M4.9 6.1l1.4 1.4M19.1 6.1l-1.4 1.4"/>
-        </symbol>
-      </svg>
-      <section id="welcome-splash" class="welcome-splash" aria-label="Welcome to Japan" aria-hidden="false">
-        <div class="welcome-splash-backdrop" aria-hidden="true"></div>
-        <div class="welcome-wind-layer" aria-hidden="true">
-          <i class="wind-petal"></i><i class="wind-petal"></i><i class="wind-petal"></i><i class="wind-petal"></i>
-          <i class="wind-petal"></i><i class="wind-petal"></i><i class="wind-petal"></i><i class="wind-petal"></i>
-          <i class="wind-blossom"></i><i class="wind-blossom"></i><i class="wind-blossom"></i>
-          <i class="wind-leaf"></i><i class="wind-leaf"></i><i class="wind-leaf"></i><i class="wind-leaf"></i><i class="wind-leaf"></i>
-        </div>
-        <div class="welcome-startup-brand" aria-label="MyJapan Daimyo crest">
-          <span class="welcome-startup-emblem"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#icon-daimyo-helmet"/></svg></span>
-          <strong>MYJAPAN</strong>
-          <small lang="ja">日本の町づくり</small>
-        </div>
-        <div class="welcome-splash-copy">
-          <h1>Welcome to Japan</h1>
-          <p lang="ja">日本へようこそ</p>
-        </div>
-      </section>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fishing Master 3D - Realistic Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-      <section id="startup-error-screen" class="startup-error-screen is-hidden" role="alert" aria-live="assertive" aria-hidden="true">
-        <div class="startup-error-card">
-          <span class="startup-error-mark" aria-hidden="true">!</span>
-          <p class="startup-error-eyebrow">MYJAPAN · STARTUP ERROR</p>
-          <h1>Dunia belum dapat dimuat</h1>
-          <p>MyJapan gagal menyiapkan grafis atau sistem permainan. Periksa dukungan WebGL dan coba muat ulang.</p>
-          <p id="startup-error-detail" class="startup-error-detail">Browser tidak dapat menyiapkan dunia permainan.</p>
-          <button id="startup-error-reload" type="button">Muat ulang permainan</button>
-        </div>
-      </section>
-
-      <div id="loading-screen" class="loading-screen is-hidden" role="status" aria-live="polite">
-        <div class="sakura-petal-layer loading-petals" aria-hidden="true">
-          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-        </div>
-        <div class="loading-emblem-wrap" aria-hidden="true">
-          <div class="loading-orbit"><i></i><i></i></div>
-          <div class="loading-emblem"><span class="loading-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><use href="#icon-daimyo-helmet"/></svg></span></div>
-        </div>
-        <p class="loading-japanese">家を建て、町を育てる</p>
-        <h1>MYJAPAN</h1>
-        <p class="loading-subtitle">Sebuah perjalanan membangun Jepang</p>
-        <p id="loading-status">Menata lanskap Jepang...</p>
-        <div class="loading-progress-row">
-          <div class="loading-track" aria-hidden="true"><span id="loading-progress"></span></div>
-          <strong id="loading-percent" aria-hidden="true">0%</strong>
-        </div>
-        <span class="loading-footnote">MENYIAPKAN DUNIA PERMAINAN</span>
-      </div>
-
-      <section id="main-menu-screen" class="main-menu-screen is-hidden" aria-label="Menu utama MyJapan" aria-hidden="true">
-        <div class="main-menu-atmosphere" aria-hidden="true"></div>
-        <div class="sakura-petal-layer menu-petals" aria-hidden="true">
-          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-        </div>
-        <div class="main-menu-content">
-          <header class="main-menu-brand">
-            <div class="main-menu-emblem" aria-hidden="true"><svg viewBox="0 0 64 64"><use href="#icon-daimyo-helmet"/></svg></div>
-            <div class="main-menu-title-wrap">
-              <p class="main-menu-japanese">日本の町づくり</p>
-              <h1>MyJapan</h1>
-              <span>BUILD A TOWN. GROW THROUGH HISTORY.</span>
+    <!-- 1. LAYAR LOADING -->
+    <div id="loading-screen" class="screen">
+        <div class="loading-content glass-panel">
+            <h1 class="logo">FISHING MASTER 3D</h1>
+            <p>Memuat Dunia Realistic & Aset...</p>
+            <div class="progress-bar">
+                <div id="progress-fill"></div>
             </div>
-          </header>
-
-          <nav id="main-menu-options" class="main-menu-options" aria-label="Pilihan menu utama">
-            <button id="new-game-button" class="main-menu-button main-menu-primary" type="button">
-              <span class="menu-button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13L19 12Z" fill="currentColor" stroke="none"/></svg></span>
-              <span class="menu-button-copy"><strong>Permainan Baru</strong><small>Mulai permukiman dari zaman Jōmon</small></span>
-              <span class="menu-button-arrow" aria-hidden="true">›</span>
-            </button>
-            <button id="continue-button" class="main-menu-button is-disabled" type="button" disabled aria-disabled="true" title="Fitur Lanjutkan belum tersedia">
-              <span class="menu-button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM7 4h10v3M8 11h8M8 15h5"/></svg></span>
-              <span class="menu-button-copy"><strong>Lanjutkan</strong><small>Belum tersedia · fitur simpan belum aktif</small></span>
-              <span class="menu-button-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3M12 14v3"/></svg></span>
-            </button>
-            <button id="menu-settings-button" class="main-menu-button" type="button">
-              <span class="menu-button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.5.9l-.3 1.8h-2.8l-.4-1.8a8 8 0 0 1-1.7 0l-.9 1.5-2.4-1.4.6-1.7a8 8 0 0 1-.9-1.5l-1.8-.3v-2.8l1.8-.4a8 8 0 0 1 0-1.7L6 9.7l1.4-2.4 1.7.6a8 8 0 0 1 1.5-.9l.3-1.8h2.8l.4 1.8a8 8 0 0 1 1.7 0l.9-1.5 2.4 1.4-.6 1.7a8 8 0 0 1 .9 1.5l1.8.3v2.8l-1.8.4a8 8 0 0 1 0 1.4Z"/></svg></span>
-              <span class="menu-button-copy"><strong>Pengaturan</strong><small>Kualitas visual dan preferensi</small></span>
-              <span class="menu-button-arrow" aria-hidden="true">›</span>
-            </button>
-            <button id="exit-game-button" class="main-menu-button main-menu-exit" type="button">
-              <span class="menu-button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 4h7v16h-7M10 8l4 4-4 4M14 12H3"/></svg></span>
-              <span class="menu-button-copy"><strong>Keluar</strong><small>Tutup sesi MyJapan</small></span>
-              <span class="menu-button-arrow" aria-hidden="true">›</span>
-            </button>
-          </nav>
-
-          <section id="main-menu-settings" class="main-menu-settings" hidden aria-label="Pengaturan menu utama">
-            <div class="menu-settings-heading">
-              <div><span class="menu-settings-kicker">PREFERENCES</span><h2>Pengaturan</h2></div>
-              <span class="menu-settings-kanji" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.5.9l-.3 1.8h-2.8l-.4-1.8a8 8 0 0 1-1.7 0l-.9 1.5-2.4-1.4.6-1.7a8 8 0 0 1-.9-1.5l-1.8-.3v-2.8l1.8-.4a8 8 0 0 1 0-1.7L6 9.7l1.4-2.4 1.7.6a8 8 0 0 1 1.5-.9l.3-1.8h2.8l.4 1.8a8 8 0 0 1 1.7 0l.9-1.5 2.4 1.4-.6 1.7a8 8 0 0 1 .9 1.5l1.8.3v2.8l-1.8.4a8 8 0 0 1 0 1.4Z"/></svg></span>
-            </div>
-            <div class="menu-settings-group">
-              <strong>Kualitas visual</strong>
-              <span>Sesuaikan detail dan performa perangkat.</span>
-              <div class="quality-options menu-quality-options" role="group" aria-label="Kualitas visual menu utama">
-                <button type="button" data-quality="low" aria-pressed="false">Ringan</button>
-                <button type="button" data-quality="balanced" class="is-active" aria-pressed="true">Seimbang</button>
-                <button type="button" data-quality="high" aria-pressed="false">Tinggi</button>
-              </div>
-            </div>
-            <button id="menu-settings-back" class="main-menu-back" type="button">‹ Kembali ke menu utama</button>
-          </section>
-          <p id="main-menu-message" class="main-menu-message" role="status" aria-live="polite"></p>
-          <footer class="main-menu-footer"><span>MYJAPAN · 2026</span><span>家から、町へ。</span></footer>
+            <button id="btn-enter" class="glass-btn" style="display: none;">Masuk ke Permainan</button>
         </div>
-      </section>
-
-
-      <section id="exit-letter-screen" class="exit-letter-screen is-hidden" aria-label="Surat perpisahan MyJapan" aria-hidden="true">
-        <div class="exit-letter-backdrop" aria-hidden="true"></div>
-        <div class="sakura-petal-layer exit-petals" aria-hidden="true">
-          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-        </div>
-        <div class="exit-letter-content">
-          <p class="exit-letter-kicker">A SMALL LETTER FROM MYJAPAN</p>
-          <div class="envelope-scene" aria-label="Amplop sakura terbuka dan memperlihatkan surat">
-            <article class="envelope-paper">
-              <span class="letter-flower" aria-hidden="true">✿</span>
-              <p class="letter-message">Terima kasih sudah bermain, ini bukan sekedar game, tapi juga tentang bagaimana tentang Jepang terbentuk.</p>
-              <p class="letter-japanese">じゃあまたね</p>
-              <p class="letter-translation">(Jaa mata ne) !!!</p>
-              <p class="letter-signoff">Full of love by S. Mubarok</p>
-            </article>
-            <div class="envelope-back"></div>
-            <div class="envelope-front"></div>
-            <div class="envelope-flap"></div>
-            <div class="envelope-seal" aria-hidden="true">桜</div>
-          </div>
-          <button id="exit-letter-back-button" class="exit-letter-back-button" type="button">Kembali ke menu utama</button>
-        </div>
-      </section>
-
-      <section id="farewell-screen" class="farewell-screen is-hidden" aria-label="Sampai jumpa lagi" aria-hidden="true">
-        <div class="farewell-content">
-          <span class="farewell-helmet"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#icon-daimyo-helmet"/></svg></span>
-          <p class="farewell-kicker">MYJAPAN · A JOURNEY THROUGH JAPAN</p>
-          <h1>Sampai jumpa lagi</h1>
-          <p class="farewell-japanese" lang="ja">再会を願って</p>
-          <button id="farewell-main-menu-button" class="farewell-main-menu-button" type="button">Kembali ke menu utama</button>
-        </div>
-      </section>
-
-      <div id="game-ui" class="game-ui is-hidden">
-        <header class="world-brand" aria-label="MyJapan">
-          <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><use href="#icon-daimyo-helmet"/></svg></div>
-          <div class="brand-copy">
-            <strong>MyJapan</strong>
-            <span>BUILD · GROW · PROSPER</span>
-          </div>
-        </header>
-
-        <div class="world-era-badge" aria-label="Era kota saat ini">
-          <span class="world-era-emblem" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 15 6l5 1-2 5 2 5-5 1-3 4-3-4-5-1 2-5-2-5 5-1Z"/><circle cx="12" cy="12" r="3"/></svg></span>
-          <span class="world-era-copy"><strong id="world-era-number">ERA 1</strong><small id="world-era">JŌMON PERIOD</small></span>
-          <span class="world-era-chevron" aria-hidden="true">›</span>
-        </div>
-
-        <nav class="top-game-actions" aria-label="Pengaturan dan mode permainan">
-          <button id="top-settings-button" class="top-game-action" type="button" data-panel="settings" aria-label="Pengaturan" title="Pengaturan"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.5.9l-.3 1.8h-2.8l-.4-1.8a8 8 0 0 1-1.7 0l-.9 1.5-2.4-1.4.6-1.7a8 8 0 0 1-.9-1.5l-1.8-.3v-2.8l1.8-.4a8 8 0 0 1 0-1.7L6 9.7l1.4-2.4 1.7.6a8 8 0 0 1 1.5-.9l.3-1.8h2.8l.4 1.8a8 8 0 0 1 1.7 0l.9 1.5 2.4-1.4-.6-1.7a8 8 0 0 1 .9-1.5l1.8-.3v-2.8l-1.8-.4a8 8 0 0 1 0-1.4Z"/></svg></button>
-          <button id="top-speed-button" class="top-game-action is-planned" type="button" disabled aria-disabled="true" aria-label="Mode percepatan belum aktif" title="Mode percepatan akan diaktifkan nanti"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-speed"/></svg><span class="planned-control-dot" aria-hidden="true">·</span></button>
-          <button id="top-help-button" class="top-game-action legacy-help-action" type="button" aria-label="Bantuan dan tutorial" title="Bantuan" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 1 1 4.6 1.7c-1.1 1.1-2.1 1.4-2.1 3M12 17.5h.01"/></svg></button>
-        </nav>
-
-        <aside id="city-summary-panel" class="city-summary-panel" aria-label="Ringkasan kota">
-          <section class="city-summary-row">
-            <span class="city-summary-icon population-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M17 11a3 3 0 0 0 0-6M18 14a5 5 0 0 1 3 4"/></svg></span>
-            <span class="city-summary-copy"><small>POPULASI</small><strong data-city-mirror="population">5</strong></span>
-          </section>
-          <section class="city-summary-row city-summary-planned" aria-label="Kebahagiaan, fitur belum aktif">
-            <span class="city-summary-icon happiness-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.1-8.8 11-8.8 11s-8.8-5.9-8.8-11a4.8 4.8 0 0 1 8.8-2.5 4.8 4.8 0 0 1 8.8 2.5Z"/></svg></span>
-            <span class="city-summary-copy"><small>KEBAHAGIAAN</small><strong>Segera hadir</strong></span>
-            <span class="planned-feature-mark">NANTI</span>
-          </section>
-          <section class="city-summary-row city-summary-planned">
-            <span class="city-summary-icon builder-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 18 0H3Z"/><path d="M5 12v3a7 7 0 0 0 14 0v-3M8 18h8M12 15v3"/></svg></span>
-            <span class="city-summary-copy"><small>ARSITEK / BUILDER</small><strong>Segera hadir</strong></span>
-            <span class="planned-feature-mark">NANTI</span>
-          </section>
-        </aside>
-
-        <aside class="city-minimap-panel" aria-label="Peta mini kota">
-          <div class="city-minimap-heading"><strong>PETA KOTA</strong><span>N</span></div>
-          <canvas id="city-minimap" width="240" height="168" aria-label="Peta mini yang menunjukkan bangunan dan posisi kamera"></canvas>
-          <button id="minimap-center-button" class="minimap-center-button" type="button" aria-label="Pusatkan kamera ke kota" title="Pusatkan kamera">⌖</button>
-        </aside>
-
-        <nav class="city-quick-actions" aria-label="Pintasan kota">
-          <button id="quick-missions-button" type="button" aria-label="Misi" title="Misi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l3 3v15H4V3Z"/><path d="M8 9h8M8 13h8M8 17h5M16 3v4h4"/></svg><span>Misi</span><b>!</b></button>
-          <button id="quick-notifications-button" type="button" aria-label="Notifikasi" title="Notifikasi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span>Notifikasi</span><b id="quick-notification-count" hidden>0</b></button>
-          <button id="quick-report-button" type="button" aria-label="Laporan kota" title="Laporan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h17"/><path d="M8 16v-4M13 16V7M18 16v-8"/></svg><span>Laporan</span></button>
-        </nav>
-
-        <div class="build-action-hint" id="build-action-hint"><span class="build-action-hint-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-7 8-13a8 8 0 0 0-16 0c0 6 8 13 8 13Z"/><circle cx="12" cy="9" r="2.5"/></svg></span><span>Pilih bangunan<br>dan tempatkan di kota</span></div>
-        <button id="build-action-button" class="build-action-button" type="button" aria-label="Konfirmasi bangunan yang dipilih"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#icon-japanese-house"/></svg><strong>Konfirmasi</strong><small>Bangun pilihan</small></button>
-
-        <button id="resource-hud-open" class="resource-hud" type="button" aria-label="Buka dashboard Stats dan informasi aset kota" aria-controls="stats-view">
-          <span class="resource-hud-heading"><span>ASET KOTA</span><b>↗ STATS</b></span>
-          <span class="resource-hud-treasury"><span class="resource-hud-yen" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="5"/><path d="M8 5v6M6 6.5h3M6 9.5h3"/><path d="M13 5.5a5 5 0 1 1-3.5 9.5M13 17h5a3 3 0 0 0 0-6h-2"/></svg></span><span class="resource-hud-money-copy"><small>KAS TERSEDIA</small><strong id="hud-money">3.500</strong></span></span>
-          <span class="resource-hud-grid" aria-label="Stok sumber daya">
-            <span class="resource-hud-item" aria-label="Pangan" title="Pangan"><span class="resource-hud-icon resource-food"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22V8M12 13 7 8M12 17l5-5M12 9 8 4M12 11l5-5"/></svg></span><b id="hud-resource-food">120</b></span>
-            <span class="resource-hud-item" aria-label="Kayu" title="Kayu"><span class="resource-hud-icon resource-wood"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 3 5 7H9l4 6H2l4-6H4Z"/><path d="M7 16v5"/></svg></span><b id="hud-resource-wood">120</b></span>
-            <span class="resource-hud-item" aria-label="Batu" title="Batu"><span class="resource-hud-icon resource-stone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 20 7-13 4 7 2-3 5 9Z"/></svg></span><b id="hud-resource-stone">80</b></span>
-            <span class="resource-hud-item" aria-label="Besi" title="Besi"><span class="resource-hud-icon resource-iron"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M3 21l9-9M13 4c2-2 5-2 7 0l1 1c-2 2-5 3-8 2L9 5"/></svg></span><b id="hud-resource-iron">0</b></span>
-            <span class="resource-hud-item" aria-label="Telur" title="Telur"><span class="resource-hud-icon resource-eggs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c4.4 0 7-2.9 7-7 0-4.5-3.1-12-7-12S5 10.5 5 15c0 4.1 2.6 7 7 7Z"/></svg></span><b id="hud-resource-eggs">0</b></span>
-            <span class="resource-hud-item" aria-label="Daging" title="Daging"><span class="resource-hud-icon resource-meat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8c-2.5 0-4 1.6-4 4v3c0 2 1.4 3 3 3h2l2 2h5l2-2h2c1.7 0 3-1.2 3-3v-3c0-2.4-1.6-4-4-4-1.1-2-2.5-3-5.5-3C10 5 8 6 7 8Z"/><path d="M9 12h.01M15 12h.01M10 16c1.2.8 2.8.8 4 0"/></svg></span><b id="hud-resource-meat">0</b></span>
-          </span>
-        </button>
-
-        <section id="world-time-banner" class="world-time-banner" aria-label="Waktu, musim, dan cuaca kota" data-phase="day">
-          <div class="world-time-cell world-clock-cell">
-            <span class="world-banner-eyebrow">WAKTU KOTA</span>
-            <div class="world-clock-line"><strong id="world-clock-value">06:00</strong><span id="world-phase-label">SIANG</span></div>
-          </div>
-          <span class="world-banner-divider" aria-hidden="true"></span>
-          <div class="world-time-cell world-season-cell">
-            <span class="world-banner-eyebrow">MUSIM JEPANG</span>
-            <strong id="world-season-value"><span>🌸</span> 春 · SEMI</strong>
-          </div>
-          <span class="world-banner-divider world-weather-divider" aria-hidden="true"></span>
-          <div class="world-time-cell world-weather-cell">
-            <span class="world-banner-eyebrow">CUACA</span>
-            <strong id="world-weather-value">☀️ Cerah</strong>
-            <small id="world-weather-forecast">Berikutnya: —</small>
-          </div>
-        </section>
-
-        <button id="network-warning" class="network-warning" type="button" aria-live="polite" aria-label="Buka status logistik kota" hidden>
-          <span class="network-warning-icon" aria-hidden="true">!</span>
-          <span class="network-warning-copy">
-            <strong>LOGISTIK BELUM TERSAMBUNG</strong>
-            <small id="network-warning-detail">Periksa jaringan jalan kota.</small>
-          </span>
-          <span class="network-warning-arrow" aria-hidden="true">↗</span>
-        </button>
-
-        <div id="pointer-status" class="pointer-status" aria-live="polite">
-          <span class="pointer-status-dot"></span>
-          <span id="pointer-status-text">MODE LIHAT · Pilih Build untuk mulai membangun</span>
-        </div>
-
-        <aside id="control-dock" class="control-dock" aria-label="Kontrol kota">
-          <div id="dock-popover" class="dock-popover" aria-hidden="true" hidden>
-            <div class="popover-header">
-              <div class="popover-heading">
-                <span class="popover-kicker">CITY CONSOLE</span>
-                <strong id="dock-panel-title">Stats</strong>
-              </div>
-              <span class="dock-era" id="dock-era">JŌMON · LV. 01</span>
-              <button id="close-dock-button" class="popover-close" type="button" aria-label="Tutup panel" title="Tutup panel">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
-              </button>
-            </div>
-            <span id="build-tab-count" hidden>0</span>
-            <span id="selected-tool-label" hidden>Select / Inspect</span>
-          <section id="stats-view" class="dock-view is-active" role="tabpanel" aria-label="Statistik kota">
-            <div class="section-topline">
-              <div>
-                <span class="section-eyebrow">OVERVIEW</span>
-                <h2>Dashboard Kota</h2>
-              </div>
-              <span class="live-indicator"><i></i> LIVE</span>
-            </div>
-
-            <div class="primary-stats">
-              <article class="metric-card metric-population">
-                <span class="metric-label">TOTAL WARGA</span>
-                <strong id="population">5</strong>
-                <span class="metric-foot">jiwa menetap</span>
-                <span class="metric-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M17 11a3 3 0 0 0 0-6M18 14a5 5 0 0 1 3 4"/></svg></span>
-              </article>
-              <article class="metric-card metric-money">
-                <span class="metric-label">KAS KOTA</span>
-                <strong id="money">¥ 3.500</strong>
-                <span class="metric-foot">saldo tersedia</span>
-                <span class="metric-symbol">¥</span>
-              </article>
-            </div>
-
-            <div class="section-heading-row">
-              <h3>Sumber daya tersedia</h3>
-              <span id="resource-capacity-label">STOK KOTA</span>
-            </div>
-            <div class="resource-grid">
-              <div class="resource-card">
-                <span class="resource-symbol resource-food" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22V8M12 13 7 8M12 17l5-5M12 9 8 4M12 11l5-5"/></svg></span>
-                <span class="resource-name">Beras / pangan</span>
-                <strong id="resource-food">120</strong>
-              </div>
-              <div class="resource-card">
-                <span class="resource-symbol resource-wood" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7 3 5 7H9l4 6H2l4-6H4Z"/><path d="M7 16v5"/></svg></span>
-                <span class="resource-name">Kayu</span>
-                <strong id="resource-wood">120</strong>
-              </div>
-              <div class="resource-card">
-                <span class="resource-symbol resource-stone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 20 7-13 4 7 2-3 5 9Z"/></svg></span>
-                <span class="resource-name">Batu</span>
-                <strong id="resource-stone">80</strong>
-              </div>
-              <div class="resource-card">
-                <span class="resource-symbol resource-iron" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 5 5 5M3 21l9-9M13 4c2-2 5-2 7 0l1 1c-2 2-5 3-8 2L9 5"/></svg></span>
-                <span class="resource-name">Besi</span>
-                <strong id="resource-iron">0</strong>
-              </div>
-              <div class="resource-card">
-                <span class="resource-symbol resource-eggs" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22c4.4 0 7-2.9 7-7 0-4.5-3.1-12-7-12S5 10.5 5 15c0 4.1 2.6 7 7 7Z"/></svg></span>
-                <span class="resource-name">Telur</span>
-                <strong id="resource-eggs">0</strong>
-              </div>
-              <div class="resource-card">
-                <span class="resource-symbol resource-meat" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 8c-2.5 0-4 1.6-4 4v3c0 2 1.4 3 3 3h2l2 2h5l2-2h2c1.7 0 3-1.2 3-3v-3c0-2.4-1.6-4-4-4-1.1-2-2.5-3-5.5-3C10 5 8 6 7 8Z"/><path d="M9 12h.01M15 12h.01M10 16c1.2.8 2.8.8 4 0"/></svg></span>
-                <span class="resource-name">Daging</span>
-                <strong id="resource-meat">0</strong>
-              </div>
-            </div>
-
-            <section class="city-growth-section" aria-label="Grafik pertumbuhan kota">
-              <div class="growth-section-heading">
-                <div><span class="section-eyebrow">GROWTH ANALYTICS</span><h3>Pertumbuhan kota</h3></div>
-                <span id="growth-history-count" class="growth-history-count">SESI INI · 1 TITIK</span>
-              </div>
-              <div class="growth-main-grid">
-                <article class="growth-chart-card">
-                  <div class="growth-chart-heading"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M17 11a3 3 0 0 0 0-6M18 14a5 5 0 0 1 3 4"/></svg> PENDUDUK</span><strong id="population-trend-change">5 jiwa</strong></div>
-                  <svg id="population-trend-chart" class="growth-line-chart" viewBox="0 0 320 86" role="img" aria-label="Grafik perubahan jumlah penduduk selama sesi ini"></svg>
-                  <div class="growth-chart-foot"><span>Awal sesi</span><span id="population-trend-start">5 jiwa</span></div>
-                </article>
-                <article class="growth-chart-card">
-                  <div class="growth-chart-heading"><span>¥ · KAS KOTA</span><strong id="money-trend-change">¥ 3.500</strong></div>
-                  <svg id="money-trend-chart" class="growth-line-chart" viewBox="0 0 320 86" role="img" aria-label="Grafik perubahan kas kota selama sesi ini"></svg>
-                  <div class="growth-chart-foot"><span>Awal sesi</span><span id="money-trend-start">¥ 3.500</span></div>
-                </article>
-              </div>
-              <div class="resource-trend-heading"><span>TREND STOK SUMBER DAYA</span><small>Nilai terkini dan riwayat sesi</small></div>
-              <div class="resource-trend-grid">
-                <article class="resource-trend-card"><span>米 BERAS / PANGAN</span><strong id="trend-food-value">120</strong><svg id="trend-food-chart" viewBox="0 0 160 38" role="img" aria-label="Tren stok beras dan pangan"></svg></article>
-                <article class="resource-trend-card"><span>木 KAYU</span><strong id="trend-wood-value">120</strong><svg id="trend-wood-chart" viewBox="0 0 160 38" role="img" aria-label="Tren stok kayu"></svg></article>
-                <article class="resource-trend-card"><span>石 BATU</span><strong id="trend-stone-value">80</strong><svg id="trend-stone-chart" viewBox="0 0 160 38" role="img" aria-label="Tren stok batu"></svg></article>
-                <article class="resource-trend-card"><span>鉄 BESI</span><strong id="trend-iron-value">0</strong><svg id="trend-iron-chart" viewBox="0 0 160 38" role="img" aria-label="Tren stok besi"></svg></article>
-                <article class="resource-trend-card"><span>卵 TELUR</span><strong id="trend-eggs-value">0</strong><svg id="trend-eggs-chart" viewBox="0 0 160 38" role="img" aria-label="Tren stok telur"></svg></article>
-                <article class="resource-trend-card"><span>肉 DAGING</span><strong id="trend-meat-value">0</strong><svg id="trend-meat-chart" viewBox="0 0 160 38" role="img" aria-label="Tren stok daging"></svg></article>
-              </div>
-              <p class="growth-history-note">Grafik merekam perubahan selama sesi permainan saat ini. Riwayat akan dimulai ulang ketika memilih Permainan Baru.</p>
-            </section>
-
-            <section class="road-network-card" aria-label="Status jaringan jalan">
-              <div class="road-network-heading">
-                <span class="road-network-icon" aria-hidden="true">⌁</span>
-                <div>
-                  <span class="section-eyebrow">LOGISTIK KOTA</span>
-                  <strong id="road-network-status">Jaringan jalan tersambung</strong>
-                </div>
-              </div>
-              <p id="road-network-detail">0 ruas jalan aktif · 0 fasilitas mengirim resource</p>
-            </section>
-            <section class="transport-network-card" aria-label="Status transportasi kota">
-              <div class="transport-network-heading">
-                <span class="section-eyebrow">TRANSPORTASI KOTA</span>
-                <strong id="transport-network-status">Belum ada terminal</strong>
-              </div>
-              <div class="transport-metrics">
-                <div><span>ARUS PENUMPANG</span><strong id="passenger-throughput">0 warga / 5 menit</strong></div>
-                <div><span>KAPASITAS KARGO</span><strong id="cargo-throughput">+0%</strong></div>
-              </div>
-              <p id="transport-network-detail">Terminal penumpang dan kargo akan tampil di sini.</p>
-            </section>
-
-            <section class="economy-card" aria-label="Simulasi pendapatan kota">
-              <div class="economy-card-heading">
-                <div>
-                  <span class="section-eyebrow">TREASURY CYCLE</span>
-                  <h3>Pendapatan kota</h3>
-                </div>
-                <span class="economy-cycle-badge">SETIAP 5 MENIT</span>
-              </div>
-              <div class="economy-income-row">
-                <strong id="economy-income">+¥ 0</strong>
-                <span>perkiraan per siklus</span>
-              </div>
-              <div class="economy-progress-track" aria-hidden="true"><span id="economy-progress"></span></div>
-              <div class="economy-meta-row">
-                <span id="economy-countdown">Pemasukan berikutnya 05:00</span>
-                <span id="economy-source-count">4 sumber pemasukan</span>
-              </div>
-              <p id="economy-breakdown" class="economy-breakdown">Hunian · Pertanian · Produksi · Infrastruktur</p>
-            </section>
-
-            <div class="townhall-progress-card" aria-label="Persyaratan untuk membangun Town Hall dan maju ke era berikutnya">
-              <div class="townhall-card-head">
-                <div id="townhall-emblem" class="townhall-emblem" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21V8l3 2 3-2 3 2 3-2 3 2 3-2v13Z"/><path d="M7 21v-5h4v5M15 13h2M7 13h1"/></svg></div>
-                <div class="townhall-copy">
-                  <span id="townhall-card-eyebrow" class="section-eyebrow">PERKEMBANGAN PERMUKIMAN</span>
-                  <strong id="townhall-era">Pemerintahan belum dibangun</strong>
-                  <small id="townhall-level">JŌMON · MENUNGGU 50 PENDUDUK</small>
-                </div>
-                <span class="built-tag is-pending">BELUM ADA</span>
-              </div>
-              <p id="era-description" class="townhall-description">Permukiman kecil mulai tumbuh di lembah.</p>
-              <div class="progress-title-row">
-                <span id="next-era-label">MENUJU YAYOI PERUNGGU</span>
-                <span id="upgrade-progress-label">0%</span>
-              </div>
-              <div class="progress-track"><span id="upgrade-progress-bar"></span></div>
-              <div id="upgrade-requirements" class="requirements-list"></div>
-              <button id="upgrade-button" class="upgrade-button" type="button" disabled>Upgrade Town Hall</button>
-              <p id="upgrade-message" class="upgrade-message" aria-live="polite"></p>
-              <p id="upgrade-forecast" class="upgrade-forecast" aria-live="polite">Perkiraan waktu dan langkah berikutnya akan tampil di sini.</p>
-              <p id="era-reward-preview" class="era-reward-preview">Bonus era berikutnya akan tampil di sini.</p>
-            </div>
-
-          </section>
-          <section id="build-view" class="dock-view" role="tabpanel" aria-label="Katalog bangunan" hidden>
-            <div class="section-topline build-topline">
-              <div>
-                <span class="section-eyebrow">CONSTRUCTION</span>
-                <h2>Build menu</h2>
-              </div>
-              <div class="build-top-actions"><span class="build-available" id="build-available-label">0 TERSEDIA</span><button id="cancel-build-button" class="cancel-build-button" type="button" title="Batalkan penempatan">ESC</button></div>
-            </div>
-            <p class="build-instruction" id="build-selection-hint" role="status" aria-live="polite">Pilih kategori pada menu melayang untuk melihat bangunan yang tersedia. Pilih kartu bangunan untuk masuk ke mode penempatan.</p>
-            <nav id="build-category-rail" class="build-category-rail" aria-label="Kategori pembangunan">
-              <button class="build-category-pill" type="button" data-build-category="townhall" aria-pressed="false"><span class="build-category-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V8l3 2 3-2 3 2 3-2 3 2 3-2v13Z"/><path d="M7 21v-5h4v5M15 13h2M7 13h1M3 8V4h4v4M17 8V4h4v4M10 4V2h4v2"/></svg></span><span class="build-category-copy"><strong>Town Hall</strong><small id="build-count-townhall">0</small></span></button>
-              <button class="build-category-pill" type="button" data-build-category="residential" aria-pressed="false"><span class="build-category-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-6h6v6"/></svg></span><span class="build-category-copy"><strong>Hunian</strong><small id="build-count-residential">0</small></span></button>
-              <button class="build-category-pill" type="button" data-build-category="infrastructure" aria-pressed="false"><span class="build-category-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h2a4 4 0 0 0 4-4v-6a4 4 0 0 1 4-4"/></svg></span><span class="build-category-copy"><strong>Infrastruktur</strong><small id="build-count-infrastructure">0</small></span></button>
-              <button class="build-category-pill" type="button" data-build-category="industry" aria-pressed="false"><span class="build-category-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22V8M12 13 7 8M12 17l5-5M12 9 8 4M12 11l5-5"/></svg></span><span class="build-category-copy"><strong>Pertanian &amp; Industri</strong><small id="build-count-industry">0</small></span></button>
-              <button class="build-category-pill" type="button" data-build-category="commercial" aria-pressed="false"><span class="build-category-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18l-2-6H5Z"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></svg></span><span class="build-category-copy"><strong>Perdagangan</strong><small id="build-count-commercial">0</small></span></button>
-              <button class="build-category-pill" type="button" data-build-category="service" aria-pressed="false"><span class="build-category-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5h16v16M12 8v8M8 12h8"/><path d="M2 21h20"/></svg></span><span class="build-category-copy"><strong>Fasilitas</strong><small id="build-count-service">0</small></span></button>
-              <button class="build-category-pill" type="button" data-build-category="landmark" aria-pressed="false"><span class="build-category-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18M5 9h14M7 9v11M17 9v11M4 20h16M3 5l2-3h14l2 3"/></svg></span><span class="build-category-copy"><strong>Landmark</strong><small id="build-count-landmark">0</small></span></button>
-            </nav>
-            <div id="building-list" class="building-list" aria-live="polite"></div>
-          </section>
-            <section id="settings-view" class="dock-view settings-view" role="tabpanel" aria-label="Pengaturan" hidden>
-              <div class="section-topline">
-                <div>
-                  <span class="section-eyebrow">PREFERENCES</span>
-                  <h2>Pengaturan</h2>
-                </div>
-                <span class="settings-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.5.9l-.3 1.8h-2.8l-.4-1.8a8 8 0 0 1-1.7 0l-.9 1.5-2.4-1.4.6-1.7a8 8 0 0 1-.9-1.5l-1.8-.3v-2.8l1.8-.4a8 8 0 0 1 0-1.7L6 9.7l1.4-2.4 1.7.6a8 8 0 0 1 1.5-.9l.3-1.8h2.8l.4 1.8a8 8 0 0 1 1.7 0l.9-1.5 2.4 1.4-.6 1.7a8 8 0 0 1 .9 1.5l1.8.3v2.8l-1.8.4a8 8 0 0 1 0 1.4Z"/></svg></span>
-              </div>
-              <div class="settings-group">
-                <div class="settings-copy">
-                  <strong>Kualitas visual</strong>
-                  <span>Atur resolusi render dan bayangan sesuai kemampuan perangkat.</span>
-                </div>
-                <div class="quality-options" role="group" aria-label="Kualitas visual">
-                  <button type="button" data-quality="low" aria-pressed="false">Ringan</button>
-                  <button type="button" data-quality="balanced" class="is-active" aria-pressed="true">Seimbang</button>
-                  <button type="button" data-quality="high" aria-pressed="false">Tinggi</button>
-                </div>
-              </div>
-              <div class="settings-group settings-action-group">
-                <div class="settings-copy">
-                  <strong>Status permainan</strong>
-                  <span>Jeda atau lanjutkan simulasi kota.</span>
-                </div>
-                <button id="top-pause-button" class="settings-action-button settings-pause-button" type="button" aria-label="Jeda permainan" aria-pressed="false" title="Jeda">
-                  <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
-                  <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg>
-                  <span>Jeda</span>
-                </button>
-              </div>
-              <div class="settings-group settings-action-group">
-                <div class="settings-copy">
-                  <strong>Kamera kota</strong>
-                  <span>Kembalikan sudut pandang ke posisi awal.</span>
-                </div>
-                <button id="camera-reset-button" class="settings-action-button" type="button">Reset kamera</button>
-              </div>
-              <div class="settings-group settings-action-group settings-exit-group">
-                <div class="settings-copy">
-                  <strong>Kembali ke menu utama</strong>
-                  <span>Akhiri sesi saat ini dan kembali ke layar awal. Kota belum dapat disimpan, jadi progres sesi ini akan dihapus.</span>
-                </div>
-                <button id="return-main-menu-button" class="settings-action-button settings-exit-button" type="button">Exit ke Menu</button>
-              </div>
-              <p class="settings-footnote">Mode Ringan mengutamakan performa. Mode Tinggi dapat memakai lebih banyak daya perangkat.</p>
-            </section>
-          </div>
-
-          <nav class="dock-launcher" aria-label="Menu kota" role="toolbar">
-            <button class="dock-launcher-button" type="button" data-panel="build" aria-label="Build: menu pembangunan" title="Menu pembangunan" aria-controls="build-view" aria-expanded="false">
-              <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#icon-japanese-house"/></svg>
-              <span class="dock-launcher-label">Build</span>
-            </button>
-            <button class="dock-launcher-button" type="button" data-panel="stats" aria-label="Stats: statistik kota" title="Statistik kota" aria-controls="stats-view" aria-expanded="false">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 16v-4M13 16V8M18 16V5" /></svg>
-              <span class="dock-launcher-label">Stats</span>
-            </button>
-            <button class="dock-launcher-button is-planned" type="button" disabled aria-disabled="true" title="Achievement akan diaktifkan nanti">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-achievement"/></svg>
-              <span class="dock-launcher-label">Achievement</span><small class="planned-menu-mark">NANTI</small>
-            </button>
-            <button class="dock-launcher-button is-planned" type="button" disabled aria-disabled="true" title="Announcement akan diaktifkan nanti">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-envelope"/></svg>
-              <span class="dock-launcher-label">Pengumuman</span><small class="planned-menu-mark">NANTI</small>
-            </button>
-            <button class="dock-launcher-button legacy-settings-launcher" type="button" data-panel="settings" aria-label="Pengaturan" title="Pengaturan" aria-controls="settings-view" aria-expanded="false" hidden>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.5.9l-.3 1.8h-2.8l-.4-1.8a8 8 0 0 1-1.7 0l-.9 1.5-2.4-1.4.6-1.7a8 8 0 0 1-.9-1.5l-1.8-.3v-2.8l1.8-.4a8 8 0 0 1 0-1.7L6 9.7l1.4-2.4 1.7.6a8 8 0 0 1 1.5-.9l.3-1.8h2.8l.4 1.8a8 8 0 0 1 1.7 0l.9 1.5 2.4-1.4-.6-1.7a8 8 0 0 1 .9-1.5l1.8-.3v-2.8l-1.8-.4a8 8 0 0 1 0-1.4Z"/></svg>
-              <span class="dock-launcher-label">Pengaturan</span>
-            </button>
-          </nav>
-        </aside>
-
-        <aside id="tutorial-companion" class="tutorial-companion is-collapsed" aria-label="Panduan pembangunan MyJapan">
-          <button id="tutorial-mask-toggle" class="tutorial-mask-toggle" type="button" aria-label="Buka tutorial awal" aria-expanded="false" aria-controls="tutorial-chat-card" title="Tutorial Daimyo">
-            <span class="tutorial-mask-halo" aria-hidden="true"></span>
-            <svg class="tutorial-helmet-icon" viewBox="0 0 64 64" aria-hidden="true"><use href="#icon-daimyo-helmet"/></svg>
-            <svg class="tutorial-mission-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-mission-scroll"/></svg>
-            <span class="tutorial-mask-status" aria-hidden="true"></span>
-          </button>
-          <section id="tutorial-chat-card" class="tutorial-chat-card">
-            <header class="tutorial-chat-header">
-              <div><span class="tutorial-chat-kicker">PENJAGA PERMUKIMAN</span><strong id="tutorial-guide-title">Salam, kepala desa!</strong></div>
-              <button id="tutorial-collapse-button" class="tutorial-collapse-button" type="button" aria-label="Ringkas panduan">−</button>
-            </header>
-            <div class="tutorial-chat-bubble">
-              <span class="tutorial-chat-stage" id="tutorial-stage">LANGKAH 01 · AKSES KOTA</span>
-              <p id="tutorial-message" aria-live="polite">Mari mulai dengan membangun jalan akses pertama untuk permukimanmu.</p>
-              <div class="tutorial-chat-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-            </div>
-            <footer class="tutorial-chat-footer">
-              <span id="tutorial-progress">01 / 06</span>
-              <button id="tutorial-next-button" type="button">Petunjuk lain <span aria-hidden="true">↗</span></button>
-            </footer>
-            <p id="tutorial-extra-tip" class="tutorial-extra-tip" hidden></p>
-          </section>
-        </aside>
-
-        <aside id="building-inspector" class="building-inspector" aria-labelledby="inspector-name" aria-hidden="true" hidden>
-          <header class="inspector-header">
-            <div class="inspector-title-wrap">
-              <span class="inspector-eyebrow">BUILDING INSPECTOR</span>
-              <h2 id="inspector-name">Bangunan</h2>
-              <p id="inspector-subtitle">Detail bangunan kota</p>
-            </div>
-            <button id="inspector-close" class="inspector-close" type="button" aria-label="Tutup detail bangunan">×</button>
-          </header>
-          <div class="inspector-content">
-            <div class="inspector-facts">
-              <div class="inspector-fact"><span>JENIS</span><strong id="inspector-type">Hunian</strong></div>
-              <div class="inspector-fact"><span>LEVEL</span><strong id="inspector-level">01</strong></div>
-            </div>
-            <div class="inspector-resident-card">
-              <span class="inspector-resident-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M17 11a3 3 0 0 0 0-6M18 14a5 5 0 0 1 3 4"/></svg></span>
-              <div class="inspector-resident-copy">
-                <span id="inspector-resident-label">PENGHUNI</span>
-                <strong id="inspector-residents">5 jiwa</strong>
-                <small id="inspector-resident-note">Penghuni tetap bangunan</small>
-              </div>
-            </div>
-            <p id="inspector-description" class="inspector-description">Deskripsi bangunan.</p>
-            <button id="building-demolish-button" class="inspector-demolish-button" type="button" hidden disabled>Bongkar fasilitas produksi</button>
-            <section id="warehouse-inventory" class="warehouse-inventory" aria-label="Inventaris lumbung" hidden>
-              <div class="warehouse-inventory-heading">
-                <span>INVENTARIS KOTA</span>
-                <small>STOK TERSEDIA</small>
-              </div>
-              <div class="warehouse-resource-grid">
-                <div><span>米 Beras / pangan</span><strong id="warehouse-food">0</strong></div>
-                <div><span>木 Kayu</span><strong id="warehouse-wood">0</strong></div>
-                <div><span>石 Batu</span><strong id="warehouse-stone">0</strong></div>
-                <div><span>鉄 Besi</span><strong id="warehouse-iron">0</strong></div>
-                <div><span>卵 Telur</span><strong id="warehouse-eggs">0</strong></div>
-                <div><span>肉 Daging</span><strong id="warehouse-meat">0</strong></div>
-              </div>
-            </section>
-          </div>
-          <footer class="inspector-footer">
-            <div class="inspector-upgrade-info">
-              <span id="inspector-upgrade-label">BIAYA UPGRADE</span>
-              <strong id="inspector-upgrade-cost">—</strong>
-              <small id="inspector-upgrade-note">Tingkatkan bangunan untuk manfaat tambahan.</small>
-            </div>
-            <button id="building-upgrade-button" class="inspector-upgrade-button" type="button">Upgrade</button>
-          </footer>
-        </aside>
-
-        <div id="hover-object-label" class="hover-object-label" aria-hidden="true" hidden>
-          <strong id="hover-object-name">Bangunan</strong>
-          <span id="hover-object-type">Jenis bangunan</span>
-        </div>
-        <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-      </div>
-      <footer class="creator-credit" aria-label="Kredit pembuat game">
-        <strong>Solo developed by Sahrul Mubarok</strong>
-        <span>Murni buatan sendiri · 2026</span>
-      </footer>
     </div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+
+    <!-- 2. LAYAR MAIN MENU -->
+    <div id="main-menu-screen" class="screen hidden">
+        <div class="menu-box glass-panel">
+            <h1>FISHING MASTER 3D</h1>
+            <p class="subtitle">Edisi Grafis Realistis & Simulasi Danau</p>
+            <button id="btn-new-game" class="glass-btn">Mulai Permainan Baru</button>
+        </div>
+    </div>
+
+    <!-- 3. LAYAR PERMAINAN UTAMA -->
+    <div id="game-screen" class="screen hidden">
+        
+        <div class="game-ui-overlay">
+            
+            <!-- Top HUD -->
+            <div class="top-hud">
+                <div class="status-bar glass-panel">
+                    <span>Koin: 🪙 <span id="coin-display">100</span></span>
+                </div>
+
+                <div id="active-mode-panel" class="mode-panel glass-panel">
+                    <h2 id="mode-title">Mode Danau</h2>
+                </div>
+            </div>
+
+            <!-- Panel Khusus Akuarium -->
+            <div id="aquarium-panel" class="action-panel glass-panel" style="display: none;">
+                <h3>🐟 Tangki Pembiakan (Breeding Tank)</h3>
+                
+                <div class="fish-list" id="fish-inventory">
+                    <!-- Ditampilkan secara dinamis oleh JS -->
+                </div>
+
+                <div class="aquarium-actions">
+                    <button id="btn-feed" class="glass-btn">🍔 Beri Makan</button>
+                    <button id="btn-breed" class="glass-btn">❤️ Kawinkan (Pilih 2)</button>
+                    <button id="btn-sell" class="glass-btn exit-btn">💰 Jual Ikan</button>
+                </div>
+                
+                <p id="aquarium-message" class="status-msg"></p>
+            </div>
+
+            <!-- Power Meter HUD Memancing -->
+            <div id="fishing-hud" class="fishing-hud-container">
+                <div class="power-meter-wrapper glass-panel">
+                    <div class="power-meter-label">KEKUATAN LEMPARAN</div>
+                    <div class="power-meter-bar">
+                        <div id="power-fill"></div>
+                    </div>
+                    <small id="power-text">TAHAN MOUSE / TEKAN LALU LEPAS UNTUK LEMPAR</small>
+                </div>
+                
+                <div id="fishing-status" class="status-toast glass-panel" style="display: none;">
+                    <span id="status-text">Kail Terlempar! Menunggu Ikan...</span>
+                </div>
+            </div>
+
+            <!-- Menu Navigasi Bawah -->
+            <div class="bottom-nav glass-panel">
+                <button id="nav-fishing" class="glass-btn">🎣 Memancing</button>
+                <button id="nav-aquarium" class="glass-btn">🐟 Akuarium</button>
+                <button id="nav-exit" class="glass-btn exit-btn">❌ Menu Utama</button>
+            </div>
+        </div>
+
+        <!-- Container Three.js 3D -->
+        <div id="3d-container"></div>
+    </div>
+
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Water.js"></script>
+
+    <!-- Game Logic -->
+    <script src="script.js"></script>
+</body>
 </html>
