@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fishing Master 3D - AAA Next-Gen Edition</title>
+    <title>Fishing Master 3D - Ultimate AAA Door Edition</title>
     
-    <!-- Google Fonts: Chewy -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
@@ -90,7 +89,6 @@
             width: 380px; height: 14px; background: rgba(0, 0, 0, 0.7);
             border-radius: 14px; margin: 0 auto 20px auto; overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
         }
 
         #progress-fill {
@@ -101,7 +99,6 @@
         }
         
         .percentage-text { font-family: monospace; font-size: 1.4rem; font-weight: bold; color: #00f2fe; margin-bottom: 15px; }
-
         #btn-enter { display: none; }
 
         #intro-screen { background: transparent; pointer-events: none; }
@@ -193,7 +190,7 @@
     <div id="loading-screen" class="screen">
         <div class="loading-content glass-panel">
             <h1 class="logo">FISHING MASTER 3D</h1>
-            <p id="loading-status-text" class="loading-text-status">Memuat Aset AAA Next-Gen PBR...</p>
+            <p id="loading-status-text" class="loading-text-status">Merakit Pintu AAA & Material PBR...</p>
             <div class="percentage-text" id="progress-percent">0%</div>
             <div class="progress-bar" id="progress-container">
                 <div id="progress-fill"></div>
@@ -216,7 +213,7 @@
     <div id="main-menu-screen" class="screen hidden">
         <div class="menu-box glass-panel">
             <h1>FISHING MASTER 3D</h1>
-            <p class="subtitle">AAA Next-Gen Remastered Hub Edition</p>
+            <p class="subtitle">Ultimate AAA Door & Real-Time Lighting Edition</p>
             <button id="btn-new-game" class="glass-btn">Mulai Petualangan</button>
         </div>
     </div>
@@ -454,7 +451,7 @@
         document.getElementById('nav-lobby').onclick = () => switchToRoom('LOBBY');
 
         // ==========================================
-        // AAA NEXT-GEN 3D ENGINE (PROCEDURAL PBR)
+        // ULTIMATE AAA 3D ENGINE (HIGH-DETAIL DOORS)
         // ==========================================
         let scene, camera, renderer, water;
         let lobbyGroup, clickables = [];
@@ -487,7 +484,6 @@
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
 
-            // Tata Cahaya Kelas Konsol/PC Modern (AAA)
             scene.add(new THREE.AmbientLight(0x1e293b, 1.2));
             
             const sun = new THREE.DirectionalLight(0xfffbeb, 3.0);
@@ -500,65 +496,55 @@
             sun.shadow.bias = -0.0005;
             scene.add(sun);
 
-            // --- RUANGAN DINDING KAYU BERKUALITAS TINGGI & 3 PINTU INTERAKTIF ---
             lobbyGroup = new THREE.Group();
             
-            // Tekstur Prosedural Dinding Kayu Klasik Mewah
-            const woodWallMat = new THREE.MeshStandardMaterial({ 
-                color: 0x27150c, 
-                roughness: 0.4, 
-                metalness: 0.1 
-            });
-            const woodFloorMat = new THREE.MeshStandardMaterial({ 
-                color: 0x180d07, 
-                roughness: 0.3, 
-                metalness: 0.15 
-            });
+            const woodWallMat = new THREE.MeshStandardMaterial({ color: 0x27150c, roughness: 0.4, metalness: 0.1 });
+            const woodFloorMat = new THREE.MeshStandardMaterial({ color: 0x180d07, roughness: 0.3, metalness: 0.15 });
 
-            // Lantai Kayu Ruangan
             const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), woodFloorMat);
             floor.rotation.x = -Math.PI/2;
             floor.receiveShadow = true;
             lobbyGroup.add(floor);
 
-            // Dinding Kayu Belakang
             const backWall = new THREE.Mesh(new THREE.BoxGeometry(60, 30, 1.2), woodWallMat);
             backWall.position.set(0, 15, -13);
             backWall.receiveShadow = true;
             lobbyGroup.add(backWall);
 
-            // Fungsi Membangun Pintu 3D Kelas AAA Berdekorasi Arsitektural
-            function createAAADoor(xPos, roomTarget, lightColorHex) {
+            // ==========================================
+            // PEMBUATAN PINTU KELAS AAA (ULTIMATE DETAIL)
+            // ==========================================
+            function createUltimateAAADoor(xPos, roomTarget, lightColorHex) {
                 const group = new THREE.Group();
                 group.position.set(xPos, 0, -12.3);
                 
-                // Lampu Sorot Volumetrik di atas Pintu
-                const doorLight = new THREE.PointLight(lightColorHex, 3.0, 10);
+                // Pencahayaan Volumetrik Spesifik Pintu
+                const doorLight = new THREE.PointLight(lightColorHex, 3.5, 9);
                 doorLight.position.set(0, 8.5, 1.2);
                 group.add(doorLight);
 
-                // Pilar Kayu Estetik Samping Pintu
-                const pillarMat = new THREE.MeshStandardMaterial({ color: 0x130a05, roughness: 0.5 });
-                const leftPillar = new THREE.Mesh(new THREE.BoxGeometry(0.6, 9, 0.8), pillarMat);
-                leftPillar.position.set(-2.3, 4.5, 0);
+                // Pilar Arsitektur Dekoratif Kiri & Kanan
+                const pillarMat = new THREE.MeshStandardMaterial({ color: 0x130a05, roughness: 0.4, metalness: 0.1 });
+                const leftPillar = new THREE.Mesh(new THREE.BoxGeometry(0.5, 9.2, 0.9), pillarMat);
+                leftPillar.position.set(-2.4, 4.5, 0);
                 leftPillar.castShadow = true;
                 group.add(leftPillar);
 
                 const rightPillar = leftPillar.clone();
-                rightPillar.position.x = 2.3;
+                rightPillar.position.x = 2.4;
                 group.add(rightPillar);
 
-                // Bingkai Kusen Tebal Detail PBR
-                const frameMat = new THREE.MeshStandardMaterial({ color: 0x0a0503, roughness: 0.35, metalness: 0.2 });
-                const frame = new THREE.Mesh(new THREE.BoxGeometry(4.8, 8.4, 0.7), frameMat);
-                frame.position.y = 4.2;
-                frame.castShadow = true;
-                group.add(frame);
+                // Kusen / Bingkai Pintu Bertingkat (3D Depth)
+                const frameMat = new THREE.MeshStandardMaterial({ color: 0x0a0503, roughness: 0.3, metalness: 0.25 });
+                const outerFrame = new THREE.Mesh(new THREE.BoxGeometry(5.0, 8.8, 0.8), frameMat);
+                outerFrame.position.y = 4.4;
+                outerFrame.castShadow = true;
+                group.add(outerFrame);
 
-                // Daun Pintu Kayu Elegan
-                const doorMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.3, metalness: 0.25 });
-                const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(4.0, 7.6, 0.35), doorMat);
-                doorMesh.position.set(0, 4.2, 0.1);
+                // Daun Pintu Utama dengan Tampilan Panel Ukiran Mewah
+                const doorMat = new THREE.MeshStandardMaterial({ color: 0x3d1705, roughness: 0.35, metalness: 0.2 });
+                const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(4.0, 7.6, 0.4), doorMat);
+                doorMesh.position.set(0, 4.3, 0.15);
                 doorMesh.castShadow = true;
                 doorMesh.receiveShadow = true;
                 
@@ -566,40 +552,54 @@
                 group.add(doorMesh);
                 clickables.push(doorMesh);
 
-                // Gagang Pintu Metalik Emas Berkualitas Tinggi
-                const handleMat = new THREE.MeshStandardMaterial({ color: 0xfde047, metalness: 0.9, roughness: 0.15 });
-                const handle = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), handleMat);
-                handle.position.set(1.5, 4.2, 0.3);
-                group.add(handle);
+                // Panel Ukiran Estetik di dalam Daun Pintu (Efek Timbul 3D)
+                const panelMat = new THREE.MeshStandardMaterial({ color: 0x270f03, roughness: 0.4 });
+                const topPanel = new THREE.Mesh(new THREE.BoxGeometry(3.2, 3.2, 0.1), panelMat);
+                topPanel.position.set(0, 6.0, 0.38);
+                group.add(topPanel);
+
+                const botPanel = new THREE.Mesh(new THREE.BoxGeometry(3.2, 3.2, 0.1), panelMat);
+                botPanel.position.set(0, 2.3, 0.38);
+                group.add(botPanel);
+
+                // Gagang Pintu Emas Mengkilap (Metallic PBR)
+                const handleMat = new THREE.MeshStandardMaterial({ color: 0xfde047, metalness: 0.95, roughness: 0.1 });
+                const handleBase = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.2, 16), handleMat);
+                handleBase.rotation.x = Math.PI / 2;
+                handleBase.position.set(1.5, 4.3, 0.45);
+                group.add(handleBase);
+
+                const handleKnob = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), handleMat);
+                handleKnob.position.set(1.5, 4.3, 0.55);
+                group.add(handleKnob);
 
                 lobbyGroup.add(group);
             }
 
-            // Buat 3 Pintu Eksklusif Berpijar Indah
-            createAAADoor(-7, 'FISHING', 0x00f2fe);  // Biru Es (Dermaga)
-            createAAADoor(0, 'AQUARIUM', 0x10b981); // Hijau Akuatik (Kolam & Akuarium)
-            createAAADoor(7, 'SHOP', 0xf59e0b);     // Kuning Hangat (Komputer Toko)
+            // Pasang 3 Pintu Masterpiece
+            createUltimateAAADoor(-7, 'FISHING', 0x00f2fe);  // Pintu Dermaga Memancing
+            createUltimateAAADoor(0, 'AQUARIUM', 0x10b981); // Pintu Kolam & Akuarium
+            createUltimateAAADoor(7, 'SHOP', 0xf59e0b);     // Pintu Terminal Komputer Toko
 
-            // Tambahan Meja Terminal Komputer Pro di Pojok Kanan Lobi
+            // Meja Terminal Komputer Pro
             const deskMat = new THREE.MeshStandardMaterial({ color: 0x17100b, roughness: 0.4 });
             const desk = new THREE.Mesh(new THREE.BoxGeometry(4.5, 2.6, 2.2), deskMat);
             desk.position.set(8, 1.3, -7);
             desk.castShadow = true; desk.receiveShadow = true;
             lobbyGroup.add(desk);
 
-            // Layar Monitor Berpijar Futuristik
             const monitorBody = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.4, 0.25), new THREE.MeshStandardMaterial({ color: 0x020617, metalness: 0.8 }));
             monitorBody.position.set(8, 3.4, -7);
             lobbyGroup.add(monitorBody);
 
-            const screenMat = new THREE.MeshStandardMaterial({ color: 0x00f2fe, emissive: 0x00f2fe, emissiveIntensity: 1.2 });
+            const screenMat = new THREE.MeshStandardMaterial({ color: 0x00f2fe, emissive: 0x00f2fe, emissiveIntensity: 1.5 });
             const screen = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 1.2), screenMat);
             screen.position.set(8, 3.4, -6.87);
             lobbyGroup.add(screen);
 
             scene.add(lobbyGroup);
 
-            // --- WATER ENVIRONMENT (UNTUK MEMANCING) ---
+            // --- WATER ENVIRONMENT ---
             const waterNormals = new THREE.TextureLoader().load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/waternormals.jpg', t => { t.wrapS = t.wrapT = THREE.RepeatWrapping; });
             water = new THREE.Water(new THREE.PlaneGeometry(800, 800), {
                 textureWidth: 512, textureHeight: 512, waterNormals: waterNormals,
@@ -609,7 +609,6 @@
             water.position.set(0, -0.5, 0);
             scene.add(water);
 
-            // Pelampung Pancing
             const floatGroup = new THREE.Group();
             floatGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16, 0, Math.PI*2, 0, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0xff2222, roughness: 0.15 })));
             floatGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16, 0, Math.PI*2, Math.PI/2, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.15 })));
@@ -738,10 +737,10 @@
                         fishingState = 'WAITING';
                         setTimeout(() => {
                             if(fishingState === 'WAITING') {
-                                coins += 45;
+                                coins += 50;
                                 document.getElementById('coin-display').innerText = coins;
-                                customAlert("🎉 Tangkapan AAA Berhasil! Ikan dikirim ke terminal komputer.");
-                                aquariumFishes.push({ id: Date.now(), species: 'Ikan Mistik AAA', color: '#00f2fe', price: 45, isHungry: true });
+                                customAlert("🎉 Tangkapan Ultimate Berhasil! Ikan dikirim ke terminal komputer.");
+                                aquariumFishes.push({ id: Date.now(), species: 'Ikan Master AAA', color: '#ff0055', price: 50, isHungry: true });
                                 floatMesh.visible = false;
                                 fishingState = 'IDLE';
                                 document.getElementById('fishing-status').style.display = 'none';
