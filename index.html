@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fishing Master 3D - Realistic Edition</title>
+    <title>Fishing Master 3D - NextGen Edition</title>
     
-    <!-- Google Fonts: Chewy (Gaya Font Finding Nemo / Kartun Bubbly) -->
+    <!-- Google Fonts: Chewy -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
@@ -26,21 +26,19 @@
             font-size: 1.1rem;
         }
 
-        /* GLASSMORPHISM BASE */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(20, 30, 60, 0.65);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             border-radius: 16px;
         }
 
         .glass-btn {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(0, 242, 254, 0.15);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(0, 242, 254, 0.5);
             color: #ffffff;
             font-weight: 600;
             padding: 12px 24px;
@@ -52,121 +50,64 @@
         }
 
         .glass-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(0, 242, 254, 0.35);
+            border-color: #00f2fe;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
         }
 
-        /* LAYOUT & SCREEN FADE TRANSITION */
         .screen {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10; transition: opacity 0.4s ease, visibility 0.4s ease;
+            opacity: 1; visibility: visible; pointer-events: auto;
         }
 
-        .screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+        .screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        /* LOADING SCREEN */
         #loading-screen {
             background: radial-gradient(circle at center, #1b263b 0%, #0d1b2a 100%);
             flex-direction: column;
         }
 
         .loading-content {
-            text-align: center;
-            padding: 40px 60px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: 2px solid #00f2fe; 
-            border-bottom: 2px solid #ff0055; 
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255,255,255,0.05);
-            position: relative;
-            overflow: hidden;
+            text-align: center; padding: 40px 60px;
+            border-top: 2px solid #00f2fe; border-bottom: 2px solid #ff0055;
         }
         
         .logo {
-            font-size: 3.2rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+            font-size: 3.5rem; margin-bottom: 10px;
             background: linear-gradient(90deg, #ff0055 0%, #00f2fe 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 12px rgba(0,242,254,0.4));
             text-transform: uppercase;
         }
 
-        .loading-text-status {
-            font-size: 1.1rem;
-            color: #a0aec0;
-            margin-bottom: 25px;
-        }
+        .loading-text-status { font-size: 1.1rem; color: #a0aec0; margin-bottom: 25px; }
 
         .progress-bar {
-            width: 350px;
-            height: 12px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 12px;
-            margin: 0 auto 20px auto;
-            overflow: hidden;
+            width: 350px; height: 12px; background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px; margin: 0 auto 20px auto; overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-            transition: opacity 0.3s ease;
         }
 
         #progress-fill {
-            width: 0%;
-            height: 100%;
+            width: 0%; height: 100%;
             background: linear-gradient(90deg, #ff0055 0%, #00f2fe 100%);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
-            transition: width 0.2s cubic-bezier(0.1, 0.7, 1.0, 0.1);
-            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.8);
+            transition: width 0.2s ease;
         }
         
-        .percentage-text {
-            font-family: monospace;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #00f2fe;
-            margin-bottom: 15px;
-            transition: opacity 0.3s ease;
-        }
+        .percentage-text { font-family: monospace; font-size: 1.3rem; font-weight: bold; color: #00f2fe; margin-bottom: 15px; }
 
-        #btn-enter {
-            display: none;
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2) 0%, rgba(0, 242, 254, 0.4) 100%);
-            border-color: #00f2fe;
-            font-size: 1.2rem;
-            padding: 14px 30px;
-        }
+        #btn-enter { display: none; }
 
-        /* LAYAR INTRO & BUBBLES */
         #intro-screen { background: transparent; pointer-events: none; }
         .floating-intro-text {
-            font-size: 6.5rem;
-            color: #ffffff;
-            text-transform: uppercase;
-            text-align: center;
+            font-size: 6.5rem; color: #ffffff; text-transform: uppercase; text-align: center;
             -webkit-text-stroke: 3px #0a192f;
-            text-shadow: 0 8px 0 #00f2fe, 0 15px 25px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 242, 254, 0.6);
+            text-shadow: 0 8px 0 #00f2fe, 0 15px 25px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 242, 254, 0.8);
             animation: floatCinematic 4s ease-in-out infinite;
         }
         @keyframes floatCinematic {
@@ -175,11 +116,9 @@
         }
 
         .bubble {
-            position: absolute;
-            bottom: -50px;
+            position: absolute; bottom: -50px;
             background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(0, 242, 254, 0.3) 60%, transparent 100%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 50%;
             animation: rise 2.5s ease-in forwards;
         }
         @keyframes rise {
@@ -189,27 +128,25 @@
             100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
         }
 
-        /* MAIN MENU */
-        #main-menu-screen { background: radial-gradient(circle at center, rgba(11,19,43,0.2) 0%, rgba(11,19,43,0.8) 100%); }
+        #main-menu-screen { background: radial-gradient(circle at center, rgba(11,19,43,0.3) 0%, rgba(11,19,43,0.9) 100%); }
         .menu-box { text-align: center; padding: 50px 70px; }
         .menu-box h1 { font-size: 3.5rem; margin-bottom: 8px; }
         .menu-box .subtitle { font-size: 1.3rem; color: #4facfe; margin-bottom: 35px; }
 
-        /* MODAL */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px);
             z-index: 1000; display: flex; justify-content: center; align-items: center;
             opacity: 0; visibility: hidden; transition: all 0.3s ease;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content {
-            background: rgba(20, 30, 60, 0.9); border: 1px solid rgba(0, 242, 254, 0.4);
+            background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(0, 242, 254, 0.6);
+            box-shadow: 0 0 30px rgba(0,242,254,0.3);
             padding: 30px; border-radius: 16px; text-align: center; min-width: 320px;
         }
         .modal-message { font-size: 1.2rem; margin-bottom: 25px; white-space: pre-line; }
 
-        /* GAME UI */
         #game-screen { display: block; }
         #3d-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity 2s ease-in-out; }
 
@@ -220,45 +157,42 @@
         .top-hud { display: flex; justify-content: space-between; padding: 25px; pointer-events: auto; }
         .status-bar, .mode-panel { padding: 12px 28px; font-size: 1.3rem; font-weight: bold; border-radius: 30px; }
 
-        .action-panel {
-            margin: 0 auto; padding: 25px 35px; width: 90%; max-width: 580px; text-align: center; pointer-events: auto;
-        }
+        .action-panel { margin: 0 auto; padding: 25px 35px; width: 90%; max-width: 580px; text-align: center; pointer-events: auto; }
         .fish-list { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
-        .fish-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); padding: 12px 18px; border-radius: 12px; cursor: pointer; }
-        .fish-card.selected { border-color: #00f2fe; background: rgba(0, 242, 254, 0.2); }
+        .fish-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); padding: 12px 18px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .fish-card:hover { border-color: #00f2fe; background: rgba(0,242,254,0.1); }
+        .fish-card.selected { border-color: #00f2fe; background: rgba(0, 242, 254, 0.3); box-shadow: 0 0 10px rgba(0,242,254,0.5); }
         .aquarium-actions { display: flex; justify-content: center; gap: 12px; margin-top: 15px; }
 
-        /* SHOP PANEL */
         #shop-panel { display: none; }
         .shop-items { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
-        .shop-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px 18px; border-radius: 12px; }
+        .shop-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
 
-        /* POWER METER */
         .fishing-hud-container { position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); z-index: 20; pointer-events: auto; text-align: center; }
         .power-meter-wrapper { padding: 16px 28px; width: 340px; }
-        .power-meter-bar { width: 100%; height: 16px; background: rgba(0,0,0,0.5); border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+        .power-meter-bar { width: 100%; height: 16px; background: rgba(0,0,0,0.6); border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
         #power-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #4facfe 0%, #00f2fe 70%, #ff4b4b 100%); }
-        .status-toast, .status-msg { color: #ffeb3b; font-weight: bold; font-size: 1.2rem; margin-top: 10px; }
+        .status-toast, .status-msg { color: #ffeb3b; font-weight: bold; font-size: 1.2rem; margin-top: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
         .bottom-nav { display: flex; justify-content: center; gap: 15px; padding: 15px 30px; margin: 0 auto 25px auto; border-radius: 24px; pointer-events: auto; }
-        .exit-btn { background: rgba(255, 75, 75, 0.18); border-color: rgba(255, 75, 75, 0.4); }
+        .exit-btn { background: rgba(255, 75, 75, 0.2); border-color: rgba(255, 75, 75, 0.5); }
+        .exit-btn:hover { background: rgba(255, 75, 75, 0.4); border-color: #ff4b4b; box-shadow: 0 0 15px rgba(255,75,75,0.5); }
     </style>
 </head>
 <body>
 
-    <!-- CUSTOM MODAL -->
     <div id="custom-modal" class="modal-overlay">
         <div class="modal-content glass-panel">
             <div id="modal-text" class="modal-message">Pesan</div>
-            <button id="modal-btn-confirm" class="glass-btn btn-confirm">OK</button>
+            <button id="modal-btn-confirm" class="glass-btn" style="padding: 8px 24px;">OK</button>
         </div>
     </div>
 
-    <!-- LOADING SCREEN -->
+    <!-- LOADING -->
     <div id="loading-screen" class="screen">
         <div class="loading-content glass-panel">
             <h1 class="logo">FISHING MASTER 3D</h1>
-            <p id="loading-status-text" class="loading-text-status">Menginisialisasi Engine...</p>
+            <p id="loading-status-text" class="loading-text-status">Menginisialisasi Next-Gen Engine...</p>
             <div class="percentage-text" id="progress-percent">0%</div>
             <div class="progress-bar" id="progress-container">
                 <div id="progress-fill"></div>
@@ -267,12 +201,12 @@
         </div>
     </div>
 
-    <!-- BUBBLE TRANSITION -->
+    <!-- BUBBLE -->
     <div id="bubble-transition-screen" class="screen hidden" style="background: linear-gradient(to top, #020813, #0b132b); z-index: 99;">
         <div id="bubble-container" style="position: absolute; width: 100%; height: 100%; overflow: hidden; pointer-events: none;"></div>
     </div>
 
-    <!-- INTRO SPLASH -->
+    <!-- INTRO -->
     <div id="intro-screen" class="screen hidden">
         <h1 class="floating-intro-text">MY FISHING WORLD</h1>
     </div>
@@ -281,12 +215,12 @@
     <div id="main-menu-screen" class="screen hidden">
         <div class="menu-box glass-panel">
             <h1>FISHING MASTER 3D</h1>
-            <p class="subtitle">Edisi Ruangan Lobi & Simulasi Realistis</p>
+            <p class="subtitle">Next-Gen Realistic Edition & Interactive Hub</p>
             <button id="btn-new-game" class="glass-btn">Mulai Petualangan</button>
         </div>
     </div>
 
-    <!-- GAME SCREEN & HUD -->
+    <!-- GAME SCREEN -->
     <div id="game-screen" class="screen hidden">
         <div class="game-ui-overlay">
             <div class="top-hud">
@@ -294,11 +228,11 @@
                     <span>Koin: 🪙 <span id="coin-display">100</span></span>
                 </div>
                 <div id="active-mode-panel" class="mode-panel glass-panel">
-                    <h2 id="mode-title">Ruang Tamu Rumah 🏠</h2>
+                    <h2 id="mode-title">Ruang Lobi Rumah 🏠</h2>
                 </div>
             </div>
 
-            <!-- AKUARIUM PANEL -->
+            <!-- AKUARIUM -->
             <div id="aquarium-panel" class="action-panel glass-panel" style="display: none;">
                 <h3>🐟 Kolam & Tangki Pembiakan</h3>
                 <div class="fish-list" id="fish-inventory"></div>
@@ -309,21 +243,21 @@
                 <p id="aquarium-message" class="status-msg"></p>
             </div>
 
-            <!-- SHOP / KOMPUTER PANEL -->
+            <!-- SHOP / KOMPUTER -->
             <div id="shop-panel" class="action-panel glass-panel">
                 <h3>💻 Terminal Komputer Toko</h3>
                 <div class="shop-items">
                     <div class="shop-row">
                         <span>Joran Karbon Pro (+Daya Tangkap)</span>
-                        <button id="buy-rod" class="glass-btn" style="padding:6px 14px;">Beli (🪙 150)</button>
+                        <button id="buy-rod" class="glass-btn" style="padding:6px 14px; font-size:1rem;">Beli (🪙 150)</button>
                     </div>
                     <div class="shop-row">
                         <span>Upgrade Kapasitas Akuarium</span>
-                        <button id="buy-tank" class="glass-btn" style="padding:6px 14px;">Beli (🪙 200)</button>
+                        <button id="buy-tank" class="glass-btn" style="padding:6px 14px; font-size:1rem;">Beli (🪙 200)</button>
                     </div>
                 </div>
                 <div class="fish-list" id="shop-fish-inventory" style="max-height:120px; overflow-y:auto;"></div>
-                <button id="btn-sell-all" class="glass-btn exit-btn" style="width:100%; margin-top:10px;">💰 Jual Semua Ikan Terpilih / Tangkapan</button>
+                <button id="btn-sell-all" class="glass-btn exit-btn" style="width:100%; margin-top:10px;">💰 Jual Semua Tangkapan</button>
                 <p id="shop-message" class="status-msg"></p>
             </div>
 
@@ -339,7 +273,6 @@
                 </div>
             </div>
 
-            <!-- BOTTOM NAV / KEMBALI KE LOBI -->
             <div class="bottom-nav glass-panel">
                 <button id="nav-lobby" class="glass-btn exit-btn">🏠 Kembali ke Lobi Rumah</button>
             </div>
@@ -353,7 +286,6 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Water.js"></script>
 
     <script>
-        // MODAL KUSTOM
         const modal = document.getElementById('custom-modal');
         const modalText = document.getElementById('modal-text');
         const modalBtnConfirm = document.getElementById('modal-btn-confirm');
@@ -363,7 +295,6 @@
             modalBtnConfirm.onclick = () => modal.classList.remove('active');
         }
 
-        // STATE & UI
         const screens = {
             loading: document.getElementById('loading-screen'),
             bubble: document.getElementById('bubble-transition-screen'),
@@ -373,14 +304,13 @@
         };
 
         let appState = 'LOADING'; 
-        let currentRoom = 'LOBBY'; // 'LOBBY', 'FISHING', 'AQUARIUM', 'SHOP'
+        let currentRoom = 'LOBBY'; 
 
         function showScreen(screenName) {
             Object.values(screens).forEach(s => s.classList.add('hidden'));
             setTimeout(() => { if (screens[screenName]) screens[screenName].classList.remove('hidden'); }, 150);
         }
 
-        // LOADING SIMULATOR
         let loadProgress = 0;
         function simulateLoading() {
             loadProgress += Math.floor(Math.random() * 15) + 5;
@@ -390,7 +320,7 @@
             if (loadProgress < 100) {
                 setTimeout(simulateLoading, 150);
             } else {
-                document.getElementById('loading-status-text').innerText = "Sistem Siap!";
+                document.getElementById('loading-status-text').innerText = "Next-Gen Engine Siap!";
                 setTimeout(() => {
                     document.getElementById('progress-container').style.display = 'none';
                     document.getElementById('progress-percent').style.display = 'none';
@@ -400,7 +330,6 @@
         }
         setTimeout(simulateLoading, 400);
 
-        // BUBBLE & AUDIO
         function playBubbleTransition(onComplete) {
             showScreen('bubble');
             const container = document.getElementById('bubble-container');
@@ -435,9 +364,7 @@
         }
 
         document.getElementById('btn-enter').addEventListener('click', () => {
-            playBubbleTransition(() => {
-                init3DWorld();
-            });
+            playBubbleTransition(() => { init3DWorld(); });
         });
 
         document.getElementById('btn-new-game').addEventListener('click', () => {
@@ -446,9 +373,7 @@
             switchToRoom('LOBBY');
         });
 
-        // ==========================================
         // EKONOMI & AKUARIUM
-        // ==========================================
         let coins = 100;
         let aquariumFishes = [
             { id: 1, species: 'Ikan Mas', color: '#ff3333', price: 25, isHungry: true },
@@ -499,7 +424,7 @@
             coins += total;
             document.getElementById('coin-display').innerText = coins;
             aquariumFishes = [];
-            document.getElementById('shop-message').innerText = `Terjual semua seharga 🪙 ${total}!`;
+            document.getElementById('shop-message').innerText = `Terjual seharga 🪙 ${total}!`;
             renderShopUI();
         };
 
@@ -529,14 +454,14 @@
         document.getElementById('nav-lobby').onclick = () => switchToRoom('LOBBY');
 
         // ==========================================
-        // 3D WORLD & INTERACTIVE DOORS (THREE.JS)
+        // NEXT-GEN 3D ENGINE (THREE.JS)
         // ==========================================
         let scene, camera, renderer, water;
-        let lobbyGroup, doors = {};
+        let lobbyGroup, clickables = [];
         let raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
         let floatMesh, fishingState = 'IDLE', powerValue = 0, powerDirection = 1, velocityY = 0, velocityZ = 0;
 
-        const camPosLobby = new THREE.Vector3(0, 3, 8);
+        const camPosLobby = new THREE.Vector3(0, 3, 9);
         const camPosFishing = new THREE.Vector3(0, 5, 15);
         const camPosAquarium = new THREE.Vector3(-15, 3, 0);
         const camPosShop = new THREE.Vector3(15, 3, 0);
@@ -547,69 +472,92 @@
             const container = document.getElementById('3d-container');
 
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0b132b);
-            scene.fog = new THREE.FogExp2(0x0b132b, 0.02);
+            scene.background = new THREE.Color(0x050b14);
+            scene.fog = new THREE.FogExp2(0x050b14, 0.018);
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.copy(camPosLobby);
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
 
-            scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-            const sun = new THREE.DirectionalLight(0xfffaed, 1.2);
-            sun.position.set(20, 40, 20);
+            // Pencahayaan Realistis Next-Gen
+            scene.add(new THREE.AmbientLight(0x1e293b, 1.2));
+            
+            const sun = new THREE.DirectionalLight(0xfff5e6, 2.0);
+            sun.position.set(15, 25, 15);
+            sun.castShadow = true;
+            sun.shadow.mapSize.width = 2048;
+            sun.shadow.mapSize.height = 2048;
             scene.add(sun);
 
-            // --- BANGUN RUANGAN LOBI RUMAH & 3 PINTU ---
+            const pointLight = new THREE.PointLight(0x00f2fe, 2, 10);
+            pointLight.position.set(0, 6, -5);
+            scene.add(pointLight);
+
+            // --- LOBI RUMAH & PINTU INTERAKTIF ---
             lobbyGroup = new THREE.Group();
             
-            // Lantai & Dinding Ruangan
-            const floorMat = new THREE.MeshStandardMaterial({ color: 0x3e2723, roughness: 0.4 });
-            const wallMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.7 });
+            // Material PBR Berkualitas Tinggi
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x271c19, roughness: 0.3, metalness: 0.1 });
+            const wallMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.6 });
             
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), floorMat);
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), floorMat);
             floor.rotation.x = -Math.PI/2;
+            floor.receiveShadow = true;
             lobbyGroup.add(floor);
 
-            const backWall = new THREE.Mesh(new THREE.BoxGeometry(30, 15, 1), wallMat);
-            backWall.position.set(0, 7.5, -10);
+            const backWall = new THREE.Mesh(new THREE.BoxGeometry(40, 20, 1), wallMat);
+            backWall.position.set(0, 10, -10);
+            backWall.receiveShadow = true;
             lobbyGroup.add(backWall);
 
-            // Buat 3 Pintu Interaktif (Kiri: Pancing, Tengah: Akuarium, Kanan: Komputer Toko)
-            const doorMat = new THREE.MeshStandardMaterial({ color: 0x8b5a2b, roughness: 0.3 });
-            const frameMat = new THREE.MeshStandardMaterial({ color: 0x111827 });
+            // Fungsi Membuat Pintu 3D Presisi Tinggi
+            const frameMat = new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.5 });
+            const doorMat = new THREE.MeshStandardMaterial({ color: 0x7c2d12, roughness: 0.4, metalness: 0.2 });
 
-            function createDoor(xPos, name, label) {
+            function createInteractiveDoor(xPos, roomTarget, labelText) {
                 const group = new THREE.Group();
                 group.position.set(xPos, 0, -9.4);
                 
-                const frame = new THREE.Mesh(new THREE.BoxGeometry(4.2, 7.2, 0.4), frameMat);
-                frame.position.y = 3.6;
+                // Kusen Pintu
+                const frame = new THREE.Mesh(new THREE.BoxGeometry(4.4, 7.4, 0.5), frameMat);
+                frame.position.y = 3.7;
+                frame.castShadow = true;
                 group.add(frame);
 
-                const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(3.8, 6.8, 0.2), doorMat);
-                doorMesh.position.set(0, 3.6, 0.1);
-                doorMesh.userData = { doorName: name };
+                // Daun Pintu (Mesh yang bisa diklik)
+                const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(3.8, 6.8, 0.3), doorMat);
+                doorMesh.position.set(0, 3.7, 0.1);
+                doorMesh.castShadow = true;
+                doorMesh.receiveShadow = true;
+                
+                // Simpan target ruangan di userData
+                doorMesh.userData = { room: roomTarget, label: labelText };
                 group.add(doorMesh);
-                doors[name] = doorMesh;
+                clickables.push(doorMesh);
 
                 lobbyGroup.add(group);
             }
 
-            createDoor(-7, 'FISHING', 'Dermaga Memancing');
-            createDoor(0, 'AQUARIUM', 'Kolam & Akuarium');
-            createDoor(7, 'SHOP', 'Terminal Komputer Toko');
+            // Buat 3 Pintu Sesuai Permintaan Sahrul
+            createInteractiveDoor(-7, 'FISHING', 'Dermaga Memancing');
+            createInteractiveDoor(0, 'AQUARIUM', 'Ruang Kolam & Akuarium');
+            createInteractiveDoor(7, 'SHOP', 'Terminal Komputer Toko');
 
             scene.add(lobbyGroup);
 
             // --- WATER ENVIRONMENT (UNTUK MEMANCING) ---
             const waterNormals = new THREE.TextureLoader().load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/waternormals.jpg', t => { t.wrapS = t.wrapT = THREE.RepeatWrapping; });
-            water = new THREE.Water(new THREE.PlaneGeometry(300, 300), {
+            water = new THREE.Water(new THREE.PlaneGeometry(500, 500), {
                 textureWidth: 512, textureHeight: 512, waterNormals: waterNormals,
-                sunDirection: sun.position.clone().normalize(), sunColor: 0xffffff, waterColor: 0x001e0f, distortionScale: 3.7
+                sunDirection: sun.position.clone().normalize(), sunColor: 0xffffff, waterColor: 0x001e0f, distortionScale: 4.0
             });
             water.rotation.x = -Math.PI / 2;
             water.position.set(0, -0.5, 0);
@@ -617,13 +565,14 @@
 
             // Pelampung Pancing
             const floatGroup = new THREE.Group();
-            floatGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16, 0, Math.PI*2, 0, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0xff2222 })));
-            floatGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16, 0, Math.PI*2, Math.PI/2, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0xffffff })));
+            floatGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16, 0, Math.PI*2, 0, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0xff2222, roughness: 0.2 })));
+            floatGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16, 0, Math.PI*2, Math.PI/2, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 })));
             floatGroup.visible = false;
             scene.add(floatGroup);
             floatMesh = floatGroup;
 
-            // EVENT KLIK RAYCASTER
+            // EVENT LISTENERS MOUSE & RAYCASTER
+            window.addEventListener('mousemove', onMouseMove);
             window.addEventListener('click', onWindowClick);
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -678,23 +627,34 @@
             }
         }
 
+        // DETEKSI HOVER KURSOR DI ATAS PINTU
+        function onMouseMove(e) {
+            if (appState !== 'GAME' || currentRoom !== 'LOBBY') return;
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(clickables);
+            document.body.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
+        }
+
+        // KLIK PINTU 3D
         function onWindowClick(e) {
             if (appState !== 'GAME' || currentRoom !== 'LOBBY') return;
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
             raycaster.setFromCamera(mouse, camera);
             
-            const intersects = raycaster.intersectObjects(lobbyGroup.children, true);
+            const intersects = raycaster.intersectObjects(clickables);
             if (intersects.length > 0) {
-                const hit = intersects[0].object;
-                if (hit.userData && hit.userData.doorName) {
-                    const dName = hit.userData.doorName;
-                    switchToRoom(dName);
+                const hitMesh = intersects[0].object;
+                if (hitMesh.userData && hitMesh.userData.room) {
+                    document.body.style.cursor = 'default';
+                    switchToRoom(hitMesh.userData.room);
                 }
             }
         }
 
-        // FIZIK & LOGIKA MEMANCING
+        // FISIKA MEMANCING
         window.addEventListener('mousedown', (e) => {
             if (currentRoom === 'FISHING' && fishingState === 'IDLE' && e.target.closest('#3d-container')) {
                 fishingState = 'CHARGING'; powerValue = 0;
@@ -719,7 +679,7 @@
                 const t = Date.now() * 0.0005;
                 camera.position.x = Math.sin(t) * 1.5;
             } else {
-                camera.position.lerp(targetCamPos, 0.05);
+                camera.position.lerp(targetCamPos, 0.06);
                 camera.lookAt(targetCamLook);
 
                 if (currentRoom === 'FISHING' && fishingState === 'CHARGING') {
@@ -736,10 +696,10 @@
                         fishingState = 'WAITING';
                         setTimeout(() => {
                             if(fishingState === 'WAITING') {
-                                coins += 30;
+                                coins += 35;
                                 document.getElementById('coin-display').innerText = coins;
                                 customAlert("🎉 Ikan berhasil ditangkap dan dikirim ke terminal komputer toko!");
-                                aquariumFishes.push({ id: Date.now(), species: 'Ikan Danau', color: '#ff9900', price: 30, isHungry: true });
+                                aquariumFishes.push({ id: Date.now(), species: 'Ikan Danau Premium', color: '#00f2fe', price: 35, isHungry: true });
                                 floatMesh.visible = false;
                                 fishingState = 'IDLE';
                                 document.getElementById('fishing-status').style.display = 'none';
